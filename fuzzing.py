@@ -55,25 +55,25 @@ class SimpleFuzzer:
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
                 #SIGSEGV - Invalid memory reference
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSEGV:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSEGV:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -6:
                 #SIGABRT - Abort signal from abort()
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGABRT:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGABRT:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -7:
                 #SIGBUS - Bus error (bad memory access)
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGBUS:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGBUS:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -8:
                 #SIGFPE - Floating-point exception
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGFPE:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGFPE:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -4:
                 #SIGILL - Illegal Instruction
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGILL:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGILL:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -31:
                 #SIGSYS - Bad system call
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSYS:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSYS:{sample_name.split('/')[-1]}"), "wb").write(content)
             if ret == -24:
                 #SIGXCPU - CPU time limit exceeded
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGXCPU:{sample_name.split('/')[-1]}"), "wb")
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGXCPU:{sample_name.split('/')[-1]}"), "wb").write(content)
            
 
 
@@ -109,8 +109,8 @@ class SimpleFuzzer:
 
 if __name__ == '__main__':
     #fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("corpus2", "crashes2")
+    fuzz = SimpleFuzzer("corpus2", "crashes_objdump")
     #fuzz_sample = list(fuzz.samples.keys())[0]
     #print("fuzzing on: ", fuzz_sample)
     #uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
-    fuzz.fuzz_worker(["objdump", "-x"])
+    fuzz.fuzz_worker(["./binutils/objdump", "-x"])
