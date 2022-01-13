@@ -1,138 +1,138 @@
-signature_bmp : {
+"signature_bmp" : {
     "type" : "byte_block",
     "size" : 2,
     "data" : 'BM',
 }
 
-file_size_bmp : {
+"file_size_bmp" : {
     "type" : "byte_block",
     "size" : 4,
     "data-func" : "add:(size:(color_table_bmp), 14, 40, size:(pixel_data_bmp))",
 }
 
-data_offset_bmp : {
+"data_offset_bmp" : {
     "type" : "byte_block",
     "size" : 4,
     "data-func" : "add:(size:(color_table_bmp), 14, 40)",
 }
-reserved_4_bmp : {
+"reserved_4_bmp" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 0,
 }
 
-header_bmp : {
+"header_bmp" : {
     "type" : "multi_byte_block",
     "byte_blocks" : ["signature_bmp", "file_size_bmp", "data_offset_bmp"],
 }
 
-info_header_size : {
+"info_header_size" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 40,
 }
 
-info_header_width : {     
+"info_header_width" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 16,
 }
 
-info_header_height : {     
+"info_header_height" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 16,
 }
 
-info_header_plane : {
+"info_header_plane" : {
     "type"  : "byte_block",
     "size" : 2,
     "data" : 1,
 }
 
-info_header_bits_per_pixel : {
+"info_header_bits_per_pixel" : {
     "type" : "byte_block",
     "size" : 2,
     "data" : 8,
 }
 
-info_header_compression : {
+"info_header_compression" : {
     "type"  : "byte_block",
     "size" : 4,
     "data" : 0,  
 }
 
-info_header_image_size : {
+"info_header_image_size" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 0,
 }
 
-info_header_XpixelsPerM : {
+"info_header_XpixelsPerM" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 1920,
 }
 
-info_header_YpixelsPerM : {
+"info_header_YpixelsPerM" : {
     "type" : "byte_block",
     "size" : 4,
     "data" : 1080,
 }
 
-info_header_color_used : {
+"info_header_color_used" : {
     "type" : "byte_block",
     "size"  : 4,
     "data" : 256,
 }
 
-info_header_important_colors : {
+"info_header_important_colors" : {
     "type" : "byte_block",
     "size" :  4,
     "data" : 0,
 }
 
-info_header_bmp : {
+"info_header_bmp" : {
     "type"  : "multi_byte_block",
     "byte_blocks" : ["info_header_size", "info_header_width", "info_header_height", "info_header_planes", "info_header_bits_per_pixel", "info_header_compression", "info_header_image_size", "info_header_XpixelsPerM", "info_header_YpixelsPerM", "info_header_color_used", "info_header_important_colors"],
 }
 
 
-rgb_pixel_rand : {
+"rgb_pixel_rand" : {
     "type" : "byte_block",
     "size" : 3,
 }
 
-reserved_1 : {
+"reserved_1" : {
     "type" : "byte_block",
     "size" : 1,
     "data" : 0,
 }
 
-color_rand : {
+"color_rand" : {
     "type" : "multi_byte_block",
     "byte_blocks" : ["rgb_pixel_rand", "reserved_1"]
 }
 
-color_table : {
+"color_table" : {
     "type" : "duplicate_block_name",
     "block" : "color_rand",
     "size" : "256",
 }
 
-pixel_index : {
+"pixel_index" : {
     "type" : "byte_block",
     "size" : 1,
 }
 
-bitmap : {
+"bitmap" : {
     "type" : "duplicate_block_name",
     "block" : "pixel_index",
     "size" : 256,
 }
 
 
-template_bmp_file : {
+"template_bmp_file" : {
     "type" : "template",
     "blocks" : ["header_bmp", "info_header_bmp", "color_table", "bitmap"],
 }
