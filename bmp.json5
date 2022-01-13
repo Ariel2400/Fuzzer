@@ -117,7 +117,7 @@
 	},
 
 	"color_table": {
-		"type": "duplicate_block_name",
+		"type": "duplicate_block",
 		"block": "color_rand",
 		"size": "256"
 	},
@@ -128,7 +128,7 @@
 	},
 
 	"bitmap": {
-		"type": "duplicate_block_name",
+		"type": "duplicate_block",
 		"block": "pixel_index",
 		"size": 256
 	},
