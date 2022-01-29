@@ -8,13 +8,13 @@
 	"file_size_bmp": {
 		"type": "byte_block",
 		"size": 4,
-		"data-func": "add:(size:(color_table_bmp), 14, 40, size:(pixel_data_bmp))"
+		"data-func": "add:(size:(color_table), 14, 40, size:(bitmap))"
 	},
 
 	"data_offset_bmp": {
 		"type": "byte_block",
 		"size": 4,
-		"data-func": "add:(size:(color_table_bmp), 14, 40)"
+		"data-func": "add:(size:(color_table), 14, 40)"
 	},
 
 	"reserved_4_bmp": {
@@ -96,7 +96,7 @@
 
 	"info_header_bmp": {
 		"type": "multi_byte_block",
-		"byte_blocks": ["info_header_size", "info_header_width", "info_header_height", "info_header_planes", "info_header_bits_per_pixel", "info_header_compression", "info_header_image_size", "info_header_XpixelsPerM", "info_header_YpixelsPerM", "info_header_color_used", "info_header_important_colors"]
+		"byte_blocks": ["info_header_size", "info_header_width", "info_header_height", "info_header_plane", "info_header_bits_per_pixel", "info_header_compression", "info_header_image_size", "info_header_XpixelsPerM", "info_header_YpixelsPerM", "info_header_color_used", "info_header_important_colors"]
 	},
 
 
@@ -134,9 +134,9 @@
 	},
 
 
-	"template_bmp_file": {
-		"type": "template",
-		"blocks": ["header_bmp", "info_header_bmp", "color_table", "bitmap"]
+	"main_template": {
+		"type": "multi_byte_block",
+		"byte_blocks": ["header_bmp", "info_header_bmp", "color_table", "bitmap"]
 	}
 
 
