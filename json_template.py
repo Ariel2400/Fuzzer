@@ -1,4 +1,4 @@
-from inspect import signature
+from dataclasses import dataclass
 from typing import TypeVar, Generic
 from enum import Enum
 from uu import decode
@@ -19,15 +19,16 @@ class Format(Enum):
     NULL_TERMINATED = 1
 
 
+# random: bool, size: int = None, val: T = None, endian: Endian = None, isBits: bool = False,
+# format_string: Format = None
+@dataclass
 class GrammarType(Generic[T]):
-    def __init__(self, random: bool, size: int = None, val: T = None, endian: Endian = None, isBits: bool = False,
-                 format_string: Format = None):
-        self.random = random
-        self.size = size
-        self.val = val
-        self.endian = endian
-        self.isBits = isBits
-        self.format_string = format_string
+    random: bool
+    size: int = 0
+    val: T = None
+    endian: Endian = None
+    isBits: bool = False
+
     # if format string: format string && val
     # if random: isBits? random byte (size) times :
 
@@ -172,17 +173,22 @@ class GrammarTemplate:
             for i, element in enumerate(self.arrayOfGrammarValues):
                 if element.random and not element.isBits:
                     f.write(random.randbytes(element.size))
-                elif element.random and element.isBits and len(buffer)%8 != 0:
+                elif element.random and element.isBits and len(buffer) % 8 != 0:
                     buffer.join([random.choice([b'1', b'0']) for _ in range(element.size)])
+                elif element.endian == Endian.LITTLE:
+                    f.write(element.val.to_bytes(element.size, 'little'))
+                elif element.endian == Endian.BIG:
+                    f.write(element.val.to_bytes(element.size, 'big'))
                 else:
                     f.write(str(element.val)[:element.size].encode())
-
+                    print(f"element[{i}] out of {len(self.arrayOfGrammarValues)} : {element}")
 
 
 if __name__ == '__main__':
     t = GrammarTemplate.createGrammarTemplateFromFile("bmp.json5")
+    # print(t.arrayOfGrammarValues)
     # temp = GrammarTemplate(arr)
-    t.create_file('check2.bin')
+    t.create_file('check3.bmp')
     i = 0
     # for grammarInstance in template.arrayOfGrammarValues:
     #     print("random = ", grammarInstance.random)
