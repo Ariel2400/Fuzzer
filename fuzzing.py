@@ -1,4 +1,4 @@
-import mutations
+
 import glob 
 import subprocess
 import os
@@ -82,6 +82,7 @@ class SimpleFuzzer:
     '''
     def fuzz_worker(self, target_command_line_args):
         assert isinstance(target_command_line_args, list)
+        
         start_time = time.time()
         threading.Thread(target=self.print_statiscs, args=[start_time]).start()
         while True:

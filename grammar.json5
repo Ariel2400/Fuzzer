@@ -11,7 +11,7 @@
     //dynamic data type
     "range_byte_block_name" : {
         "type" : "identifier of the block(string)(must be range_block)",
-        "range": "size of the range of the block(range:[min size(include), max size(not include)])(must)",
+        "range": "size of the range of the block(range:[min size(include), max size(include)])(must)",
         "data" : "if does not have so data will be random(int, bytes:'He\\x23\\x76' if the number of bytes is smaller than the size then the rest will be random)(optional)",
         "endian" : "default little(string)(optional)",
     },
@@ -46,7 +46,7 @@
     "duplicate_block_name" : {
         "type" : "identifier of the block(string)(must be duplicate_block_block)",
         "block" : "block name for duplication, all types except multi_bit_block(string)(must)",
-        "size" : "number of duplication"
+        "size" : "number of duplication(int)(must)"
     },
 
     //dynamic data type
@@ -56,17 +56,12 @@
         "range" : "size of the range of the block(range:[min size(include), max size(not include)])(must)",
     },
 
-
-    "block_choise_name" : {
+    //choice_block
+    "choice_block_name" : {
         "type" : "identifier of the block(string)(must be block_choise)",
         "blocks" : "array of blocks, will choose random block(array)(must)",
     },
 
-    //static data type
-    "template_name" : {
-        "type" : "identifier of the block(string)(must be template)",
-        "blocks" : "array of block of all types except multi_bit_block (array)(must)"
-    },
 
     /////////examples:
     
@@ -105,11 +100,6 @@
     "field_4" : {
         "type" : "multi_bit_block",
         "bit_blocks" : ["some_bits1", "some_bits2"] //01110110
-    },
-
-    "file_format_template" : {
-        "type" : "template",
-        "blocks" : ["field_1", "field_2", "field_3", "field_4"]
     }
 }
 

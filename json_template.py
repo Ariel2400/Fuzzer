@@ -1,16 +1,26 @@
-
-
-
-from inspect import signature
+import jsonschema
 from typing import TypeVar, Generic
 from enum import Enum
-from uu import decode
 import random 
 import re
 import pyjson5
 import random
-
+import os
 T = TypeVar('T')
+
+def strToBytes(string):
+    stringBytes = []
+    for ch in string:
+        stringBytes += [ord(ch)]
+    return bytes(stringBytes)
+
+
+def validateJson(jsonData, schema):
+    try:
+        jsonschema.validate(instance=jsonData, schema=schema)
+    except jsonschema.exceptions.ValidationError as err:
+        return False
+    return True
 
 class Endian(Enum):
     BIG = 0
@@ -25,6 +35,8 @@ class GrammarType(Generic[T]):
         self.format_string = format_string
 
 class GrammarTemplate:
+    JSON_SCHEMA_PATH = 'grammar-schema.json'
+
     def __init__(self, arrayOfGrammarValues:list):
         self.arrayOfGrammarValues = arrayOfGrammarValues
 
@@ -157,14 +169,34 @@ class GrammarTemplate:
         return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
 
 
-    def create_file(self, filename, path):
-        pass
+    def create_file(self, path):
+        file_obj = open(path, 'wb')
+        chars = string.punctuation + string.digits + string.ascii_letters
+        for element in self.arrayOfGrammarValues:
+            if element.random == True:
+                val = ''.join(random.choice(chars) for i in range(element.size))
+                file_obj.write(strToBytes(val))
+            else:
+                if type(element.val) == str:
+                    val = element.val
+                    if len(val) > element.size:
+                        val = val[:element.size]
+                    file_obj.write(strToBytes(val))
+                elif type(element.val) == int:
+                    endian = 'little'
+                    if element.endian == Endian.BIG:
+                        endian = 'big'
+                    val = (element.val).to_bytes(element.size, endian)
+                    file_obj.write(val)
+        file_obj.close()
+                    
 
 
     
 
 if __name__ == '__main__':
     template = GrammarTemplate.createGrammarTemplateFromFile("bmp.json5")
+    '''
     i = 0
     for grammarInstance in template.arrayOfGrammarValues:
         print("random = ", grammarInstance.random)
@@ -177,3 +209,5 @@ if __name__ == '__main__':
         if i == 8:
             break
         i += 1
+    '''
+    template.create_file("./test")
