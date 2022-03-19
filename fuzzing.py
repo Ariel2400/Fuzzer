@@ -98,7 +98,7 @@ class SimpleFuzzer:
         assert isinstance(target_command_line_args, list)
 
         start_time = time.time()
-        threading.Thread(target=self.print_statiscs, args=[start_time]).start()
+        threading.Thread(target=self.print_statistics, args=[start_time]).start()
         while True:
             sample_path = random.choice(list(self.samples.keys()))
             sample_content = bytearray(self.samples[sample_path])
@@ -113,7 +113,7 @@ class SimpleFuzzer:
     print to stdout the statistics about the fuzzing so far
     '''
 
-    def print_statiscs(self, start_time):
+    def print_statistics(self, start_time):
         while True:
             time.sleep(2)
             elapsed = time.time() - start_time
