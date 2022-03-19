@@ -4,6 +4,7 @@ import os
 
 
 NUM_OF_FILES = 100_000
+
 if __name__ == '__main__':
     grammar_path, target_dir = sys.argv[1], sys.argv[2]
     template_creator = GrammarTemplate(GrammarTemplate.createGrammarTemplateFromFile(grammar_path))

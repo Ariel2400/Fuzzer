@@ -104,7 +104,7 @@ class SimpleFuzzer:
             sample_content = bytearray(self.samples[sample_path])
 
             for _ in range(10):
-                sample_content[random.randint(0, len(sample_content) - 1)] = random.randint(0, 255)
+                mutations.Mutation3Choices.mutate(sample_content)
 
             self.fuzz("thd_0", sample_content, target_command_line_args, sample_path)
             self.amount_of_fuzzings += 1

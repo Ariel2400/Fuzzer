@@ -198,22 +198,3 @@ class GrammarTemplate:
                     val = (element.val).to_bytes(element.size, endian)
                     file_obj.write(val)
         file_obj.close()
-
-
-if __name__ == '__main__':
-    template = GrammarTemplate.createGrammarTemplateFromFile('grammer')
-    '''
-    i = 0
-    for grammarInstance in template.arrayOfGrammarValues:
-        print("random = ", grammarInstance.random)
-        print("size = ", grammarInstance.size)
-        print("val = ", grammarInstance.val)
-        print("endian = ", grammarInstance.endian)
-        print("isBits = ", grammarInstance.isBits)
-        print("format_string = ", grammarInstance.format_string)
-        print("\n\n")
-        if i == 8:
-            break
-        i += 1
-    '''
-    template.create_file("./test")
