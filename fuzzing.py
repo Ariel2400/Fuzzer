@@ -6,6 +6,8 @@ import random
 import time
 import threading
 import mutations
+import logging
+
 
 class SimpleFuzzer:
     def __init__(self, sample_dir_path, crashes_dir_path):
@@ -13,6 +15,7 @@ class SimpleFuzzer:
         self.crashes_dir_path = crashes_dir_path
         self.samples = self.load_samples()
         self.amount_of_fuzzings = 0
+        logging.basicConfig(filename='fuzzer.log', filemode='w', format="%(name)s: %(levelname)s: %(message)s")
 
     '''
     load all the samples into a data structure, without duplications.
@@ -25,10 +28,12 @@ class SimpleFuzzer:
         sample_content_dict = {}
         for filename in corpus_filenames:
             previous_corpus_size = len(corpus)
-            file_content = open(filename, 'rb').read()
+            with open(filename, 'rb') as f:
+                file_content = f.read()
             corpus.add(file_content)
             if len(corpus) != previous_corpus_size:
                 sample_content_dict[filename] = file_content
+        logging.debug("Added file contents to corpus")
         return sample_content_dict
 
     ''' 
@@ -47,13 +52,14 @@ class SimpleFuzzer:
         with open(file_save_fuzz_content, "wb") as fd:
             fd.write(content)
 
+        logging.debug(f'running following content: {target_command_line_args + [file_save_fuzz_content]}')
         sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
                               stdout=subprocess.DEVNULL,
                               stderr=subprocess.DEVNULL, )
 
         ret = sp.wait()
         if ret != 0:
-            print(f"Exited with {ret}")
+            logging.info(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
                 # SIGSEGV - Invalid memory reference
@@ -112,7 +118,7 @@ class SimpleFuzzer:
             time.sleep(2)
             elapsed = time.time() - start_time
             fscp = float(self.amount_of_fuzzings) / elapsed
-            print(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
+            logging.info(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
 
 
 if __name__ == '__main__':
