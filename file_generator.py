@@ -1,5 +1,6 @@
 from file_by_template import GrammarTemplate
-import sys, os
+import sys
+import os
 
 
 NUM_OF_FILES = 100_000
