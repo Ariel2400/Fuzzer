@@ -1,11 +1,11 @@
-
-import glob 
+import glob
 import subprocess
 import os
 import hashlib
 import random
 import time
 import threading
+import mutations
 
 class SimpleFuzzer:
     def __init__(self, sample_dir_path, crashes_dir_path):
@@ -18,6 +18,7 @@ class SimpleFuzzer:
     load all the samples into a data structure, without duplications.
     there may be two diffrent files with same content, address that.
     '''
+
     def load_samples(self):
         corpus_filenames = glob.glob(self.sample_dir_path + "/*")
         corpus = set()
@@ -27,13 +28,14 @@ class SimpleFuzzer:
             file_content = open(filename, 'rb').read()
             corpus.add(file_content)
             if len(corpus) != previous_corpus_size:
-                sample_content_dict[filename] = file_content 
+                sample_content_dict[filename] = file_content
         return sample_content_dict
 
     ''' 
     create a new file with content and run it on the target_command_line 
     target command line args is in the format: [[target], [-args]].
     '''
+
     def fuzz(self, file_save_fuzz_content, content, target_command_line_args, sample_name):
         assert isinstance(file_save_fuzz_content, str)
         assert isinstance(content, bytearray)
@@ -41,48 +43,54 @@ class SimpleFuzzer:
         assert isinstance(sample_name, str)
         # run the target on the sample content with args,
         # if crashed, document the crash in a file and put it in self.crashes_dir
-        
+
         with open(file_save_fuzz_content, "wb") as fd:
             fd.write(content)
-        
+
         sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,)
-        
+                              stdout=subprocess.DEVNULL,
+                              stderr=subprocess.DEVNULL, )
+
         ret = sp.wait()
         if ret != 0:
             print(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
-                #SIGSEGV - Invalid memory reference
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSEGV:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGSEGV - Invalid memory reference
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSEGV:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -6:
-                #SIGABRT - Abort signal from abort()
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGABRT:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGABRT - Abort signal from abort()
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGABRT:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -7:
-                #SIGBUS - Bus error (bad memory access)
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGBUS:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGBUS - Bus error (bad memory access)
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGBUS:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -8:
-                #SIGFPE - Floating-point exception
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGFPE:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGFPE - Floating-point exception
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGFPE:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -4:
-                #SIGILL - Illegal Instruction
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGILL:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGILL - Illegal Instruction
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGILL:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -31:
-                #SIGSYS - Bad system call
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSYS:{sample_name.split('/')[-1]}"), "wb").write(content)
+                # SIGSYS - Bad system call
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSYS:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
             if ret == -24:
-                #SIGXCPU - CPU time limit exceeded
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGXCPU:{sample_name.split('/')[-1]}"), "wb").write(content)
-           
-
+                # SIGXCPU - CPU time limit exceeded
+                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGXCPU:{sample_name.split('/')[-1]}"),
+                     "wb").write(content)
 
     '''
     iterate over samples and fuzz them
     '''
+
     def fuzz_worker(self, target_command_line_args):
         assert isinstance(target_command_line_args, list)
-        
+
         start_time = time.time()
         threading.Thread(target=self.print_statiscs, args=[start_time]).start()
         while True:
@@ -91,15 +99,14 @@ class SimpleFuzzer:
 
             for _ in range(10):
                 sample_content[random.randint(0, len(sample_content) - 1)] = random.randint(0, 255)
-            
+
             self.fuzz("thd_0", sample_content, target_command_line_args, sample_path)
             self.amount_of_fuzzings += 1
-
-
 
     '''
     print to stdout the statistics about the fuzzing so far
     '''
+
     def print_statiscs(self, start_time):
         while True:
             time.sleep(2)
@@ -109,9 +116,10 @@ class SimpleFuzzer:
 
 
 if __name__ == '__main__':
-    #fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("corpus2", "crashes_objdump")
-    #fuzz_sample = list(fuzz.samples.keys())[0]
-    #print("fuzzing on: ", fuzz_sample)
-    #uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
+    # fuzz = SimpleFuzzer("corpus", "crashes")
+    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/Json Parsers/C implementation/tests",
+                        "crashes_json_jq_impl")
+    # fuzz_sample = list(fuzz.samples.keys())[0]
+    # print("fuzzing on: ", fuzz_sample)
+    # uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
     fuzz.fuzz_worker(["./binutils/objdump", "-x"])
