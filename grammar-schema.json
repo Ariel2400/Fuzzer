@@ -1,0 +1,292 @@
+{
+  "type": "object",
+  "patternProperties": {
+    "^.*$": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "byte_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "size"
+            ],
+            "properties": {
+              "endian": {
+                "enum": [
+                  "big",
+                  "little"
+                ]
+              },
+              "size": {
+                "type": "integer"
+              },
+              "data": {
+                "type": [
+                  "integer",
+                  "string"
+                ]
+              },
+              "data-func": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "range_byte_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "range"
+            ],
+            "properties": {
+              "endian": {
+                "enum": [
+                  "big",
+                  "little"
+                ]
+              },
+              "range": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "data": {
+                "type": [
+                  "integer",
+                  "string"
+                ]
+              },
+              "data-func": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "str_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "content",
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "enum": [
+                  "c-string",
+                  "pascal-string"
+                ]
+              },
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "bit_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "size"
+            ],
+            "properties": {
+              "size": {
+                "type": [
+                  "integer"
+                ],
+                "minimum": 0
+              },
+              "data": {
+                "type": "string",
+                "pattern": "^[0,1]*$"
+              },
+              "data-func": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "multi_bit_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "bit_blocks"
+            ],
+            "properties": {
+              "bit_blocks": {
+                "type": [
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "multi_byte_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "byte_blocks"
+            ],
+            "properties": {
+              "byte_blocks": {
+                "type": [
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "duplicate_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "block",
+              "size"
+            ],
+            "properties": {
+              "block": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "range_duplicate_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "block",
+              "range"
+            ],
+            "properties": {
+              "block": {
+                "type": "string"
+              },
+              "range": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "choise_block"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "blocks"
+            ],
+            "properties": {
+              "blocks": {
+                "type": [
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "template"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "blocks"
+            ],
+            "properties": {
+              "blocks": {
+                "type": [
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
