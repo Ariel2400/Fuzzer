@@ -1,0 +1,20 @@
+{
+    "true_block":{
+        "type":"str_block",
+        "content":"True",
+        "format":"c-string"
+    }
+
+    "false_block:{
+        "type":"str_block",
+        "content":"False",
+        "format":"c-string"
+    }
+
+    "Bool":{
+        "type":"block_choise",
+        "blocks":["false_block", "true_block"]
+    }
+
+    "key"
+}
