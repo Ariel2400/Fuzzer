@@ -35,8 +35,8 @@ class Endian(Enum):
 @dataclass
 class GrammarType(Generic[T]):
     random: bool
-    format_string: str
-    val: T
+    val: T = None
+    format_string: str = 'c-string'
     endian: Endian=Endian.LITTLE
     isBits: bool = False
     size: int = 0

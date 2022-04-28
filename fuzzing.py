@@ -123,9 +123,9 @@ class SimpleFuzzer:
 
 if __name__ == '__main__':
     # fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/Json Parsers/C implementation/tests",
-                        "crashes_json_jq_impl")
+    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples",
+                        "crashes_json_C_impl")
     # fuzz_sample = list(fuzz.samples.keys())[0]
     # print("fuzzing on: ", fuzz_sample)
     # uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
-    fuzz.fuzz_worker(["./binutils/objdump", "-x"])
+    fuzz.fuzz_worker(["./Json_Parsers/C_implementation/a.out"])

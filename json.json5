@@ -495,10 +495,13 @@
         "type":"choice_block",
         "blocks":["ascii_0","ascii_1","ascii_2","ascii_3","ascii_4","ascii_5","ascii_6","ascii_7","ascii_8","ascii_9","ascii_a","ascii_b","ascii_c","ascii_d","ascii_e","ascii_f","ascii_g","ascii_h","ascii_i","ascii_j","ascii_k","ascii_l","ascii_m","ascii_n","ascii_o","ascii_p","ascii_q","ascii_r","ascii_s","ascii_t","ascii_u","ascii_v","ascii_w","ascii_x","ascii_y","ascii_z","ascii_A","ascii_B","ascii_C","ascii_D","ascii_E","ascii_F","ascii_G","ascii_H","ascii_I","ascii_J","ascii_K","ascii_L","ascii_M","ascii_N","ascii_O","ascii_P","ascii_Q","ascii_R","ascii_S","ascii_T","ascii_U","ascii_V","ascii_W","ascii_X","ascii_Y","ascii_Z","ascii_!","ascii_#","ascii_$","ascii_%","ascii_&","ascii_'","ascii_(","ascii_)","ascii_*","ascii_+","ascii_,","ascii_.","ascii_/","ascii_:","ascii_;","ascii_<","ascii_=","ascii_>","ascii_?","ascii_@","ascii_\\","ascii_^","ascii__","ascii_`","ascii_{","ascii_|","ascii_}","ascii_~"]
     },
-
+    "ascii_char_test": {
+        "type": "byte_block",
+        "size": 1
+    },
     "str" : {
         "type" : "range_duplicate_block",
-        "block" : "ascii_char",
+        "block" : "ascii_char_test",
         "range" : [1,40]
     },
     "commatized_str": {

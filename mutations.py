@@ -50,5 +50,5 @@ class Mutation3Choices(BaseMutation):
         ]
 
         selected_mutator = random.choice(choices)
-        index = random.randint(0, len(bytes))
+        index = random.randint(0, len(input_data))
         return selected_mutator(input_data, index)
