@@ -200,3 +200,9 @@ class GrammarTemplate:
                     val = element.val.to_bytes(element.size, endian)
                     file_obj.write(val)
         file_obj.close()
+
+
+
+if __name__ == "__main__":
+    obj = GrammarTemplate.createGrammarTemplateFromFile("test.json")
+    obj.create_file("./0101010101")
