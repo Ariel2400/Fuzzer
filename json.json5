@@ -1,20 +1,587 @@
 {
     "true_block":{
         "type":"str_block",
-        "content":"True",
+        "content":"true",
         "format":"c-string"
-    }
+    },
 
-    "false_block:{
+    "false_block":{
         "type":"str_block",
-        "content":"False",
+        "content":"false",
         "format":"c-string"
-    }
+    },
 
     "Bool":{
-        "type":"block_choise",
+        "type":"choice_block",
         "blocks":["false_block", "true_block"]
-    }
+    },
 
-    "key"
+    "ascii_0": {
+	"type" : "str_block", 
+	"content" : "0", 
+	"format" : "c-string"
+    },
+    "ascii_1": {
+        "type" : "str_block", 
+        "content" : "1", 
+        "format" : "c-string"
+    },
+    "ascii_2": {
+        "type" : "str_block", 
+        "content" : "2", 
+        "format" : "c-string"
+    },
+    "ascii_3": {
+        "type" : "str_block", 
+        "content" : "3", 
+        "format" : "c-string"
+    },
+    "ascii_4": {
+        "type" : "str_block", 
+        "content" : "4", 
+        "format" : "c-string"
+    },
+    "ascii_5": {
+        "type" : "str_block", 
+        "content" : "5", 
+        "format" : "c-string"
+    },
+    "ascii_6": {
+        "type" : "str_block", 
+        "content" : "6", 
+        "format" : "c-string"
+    },
+    "ascii_7": {
+        "type" : "str_block", 
+        "content" : "7", 
+        "format" : "c-string"
+    },
+    "ascii_8": {
+        "type" : "str_block", 
+        "content" : "8", 
+        "format" : "c-string"
+    },
+    "ascii_9": {
+        "type" : "str_block", 
+        "content" : "9", 
+        "format" : "c-string"
+    },
+    "ascii_a": {
+        "type" : "str_block", 
+        "content" : "a", 
+        "format" : "c-string"
+    },
+    "ascii_b": {
+        "type" : "str_block", 
+        "content" : "b", 
+        "format" : "c-string"
+    },
+    "ascii_c": {
+        "type" : "str_block", 
+        "content" : "c", 
+        "format" : "c-string"
+    },
+    "ascii_d": {
+        "type" : "str_block", 
+        "content" : "d", 
+        "format" : "c-string"
+    },
+    "ascii_e": {
+        "type" : "str_block", 
+        "content" : "e", 
+        "format" : "c-string"
+    },
+    "ascii_f": {
+        "type" : "str_block", 
+        "content" : "f", 
+        "format" : "c-string"
+    },
+    "ascii_g": {
+        "type" : "str_block", 
+        "content" : "g", 
+        "format" : "c-string"
+    },
+    "ascii_h": {
+        "type" : "str_block", 
+        "content" : "h", 
+        "format" : "c-string"
+    },
+    "ascii_i": {
+        "type" : "str_block", 
+        "content" : "i", 
+        "format" : "c-string"
+    },
+    "ascii_j": {
+        "type" : "str_block", 
+        "content" : "j", 
+        "format" : "c-string"
+    },
+    "ascii_k": {
+        "type" : "str_block", 
+        "content" : "k", 
+        "format" : "c-string"
+    },
+    "ascii_l": {
+        "type" : "str_block", 
+        "content" : "l", 
+        "format" : "c-string"
+    },
+    "ascii_m": {
+        "type" : "str_block", 
+        "content" : "m", 
+        "format" : "c-string"
+    },
+    "ascii_n": {
+        "type" : "str_block", 
+        "content" : "n", 
+        "format" : "c-string"
+    },
+    "ascii_o": {
+        "type" : "str_block", 
+        "content" : "o", 
+        "format" : "c-string"
+    },
+    "ascii_p": {
+        "type" : "str_block", 
+        "content" : "p", 
+        "format" : "c-string"
+    },
+    "ascii_q": {
+        "type" : "str_block", 
+        "content" : "q", 
+        "format" : "c-string"
+    },
+    "ascii_r": {
+        "type" : "str_block", 
+        "content" : "r", 
+        "format" : "c-string"
+    },
+    "ascii_s": {
+        "type" : "str_block", 
+        "content" : "s", 
+        "format" : "c-string"
+    },
+    "ascii_t": {
+        "type" : "str_block", 
+        "content" : "t", 
+        "format" : "c-string"
+    },
+    "ascii_u": {
+        "type" : "str_block", 
+        "content" : "u", 
+        "format" : "c-string"
+    },
+    "ascii_v": {
+        "type" : "str_block", 
+        "content" : "v", 
+        "format" : "c-string"
+    },
+    "ascii_w": {
+        "type" : "str_block", 
+        "content" : "w", 
+        "format" : "c-string"
+    },
+    "ascii_x": {
+        "type" : "str_block", 
+        "content" : "x", 
+        "format" : "c-string"
+    },
+    "ascii_y": {
+        "type" : "str_block", 
+        "content" : "y", 
+        "format" : "c-string"
+    },
+    "ascii_z": {
+        "type" : "str_block", 
+        "content" : "z", 
+        "format" : "c-string"
+    },
+    "ascii_A": {
+        "type" : "str_block", 
+        "content" : "A", 
+        "format" : "c-string"
+    },
+    "ascii_B": {
+        "type" : "str_block", 
+        "content" : "B", 
+        "format" : "c-string"
+    },
+    "ascii_C": {
+        "type" : "str_block", 
+        "content" : "C", 
+        "format" : "c-string"
+    },
+    "ascii_D": {
+        "type" : "str_block", 
+        "content" : "D", 
+        "format" : "c-string"
+    },
+    "ascii_E": {
+        "type" : "str_block", 
+        "content" : "E", 
+        "format" : "c-string"
+    },
+    "ascii_F": {
+        "type" : "str_block", 
+        "content" : "F", 
+        "format" : "c-string"
+    },
+    "ascii_G": {
+        "type" : "str_block", 
+        "content" : "G", 
+        "format" : "c-string"
+    },
+    "ascii_H": {
+        "type" : "str_block", 
+        "content" : "H", 
+        "format" : "c-string"
+    },
+    "ascii_I": {
+        "type" : "str_block", 
+        "content" : "I", 
+        "format" : "c-string"
+    },
+    "ascii_J": {
+        "type" : "str_block", 
+        "content" : "J", 
+        "format" : "c-string"
+    },
+    "ascii_K": {
+        "type" : "str_block", 
+        "content" : "K", 
+        "format" : "c-string"
+    },
+    "ascii_L": {
+        "type" : "str_block", 
+        "content" : "L", 
+        "format" : "c-string"
+    },
+    "ascii_M": {
+        "type" : "str_block", 
+        "content" : "M", 
+        "format" : "c-string"
+    },
+    "ascii_N": {
+        "type" : "str_block", 
+        "content" : "N", 
+        "format" : "c-string"
+    },
+    "ascii_O": {
+        "type" : "str_block", 
+        "content" : "O", 
+        "format" : "c-string"
+    },
+    "ascii_P": {
+        "type" : "str_block", 
+        "content" : "P", 
+        "format" : "c-string"
+    },
+    "ascii_Q": {
+        "type" : "str_block", 
+        "content" : "Q", 
+        "format" : "c-string"
+    },
+    "ascii_R": {
+        "type" : "str_block", 
+        "content" : "R", 
+        "format" : "c-string"
+    },
+    "ascii_S": {
+        "type" : "str_block", 
+        "content" : "S", 
+        "format" : "c-string"
+    },
+    "ascii_T": {
+        "type" : "str_block", 
+        "content" : "T", 
+        "format" : "c-string"
+    },
+    "ascii_U": {
+        "type" : "str_block", 
+        "content" : "U", 
+        "format" : "c-string"
+    },
+    "ascii_V": {
+        "type" : "str_block", 
+        "content" : "V", 
+        "format" : "c-string"
+    },
+    "ascii_W": {
+        "type" : "str_block", 
+        "content" : "W", 
+        "format" : "c-string"
+    },
+    "ascii_X": {
+        "type" : "str_block", 
+        "content" : "X", 
+        "format" : "c-string"
+    },
+    "ascii_Y": {
+        "type" : "str_block", 
+        "content" : "Y", 
+        "format" : "c-string"
+    },
+    "ascii_Z": {
+        "type" : "str_block", 
+        "content" : "Z", 
+        "format" : "c-string"
+    },
+    "ascii_!": {
+        "type" : "str_block", 
+        "content" : "!", 
+        "format" : "c-string"
+    },
+    "ascii_#": {
+        "type" : "str_block", 
+        "content" : "#", 
+        "format" : "c-string"
+    },
+    "ascii_$": {
+        "type" : "str_block", 
+        "content" : "$", 
+        "format" : "c-string"
+    },
+    "ascii_%": {
+        "type" : "str_block", 
+        "content" : "%", 
+        "format" : "c-string"
+    },
+    "ascii_&": {
+        "type" : "str_block", 
+        "content" : "&", 
+        "format" : "c-string"
+    },
+    "ascii_'": {
+        "type" : "str_block", 
+        "content" : "'", 
+        "format" : "c-string"
+    },
+    "ascii_(": {
+        "type" : "str_block", 
+        "content" : "(", 
+        "format" : "c-string"
+    },
+    "ascii_)": {
+        "type" : "str_block", 
+        "content" : ")", 
+        "format" : "c-string"
+    },
+    "ascii_*": {
+        "type" : "str_block", 
+        "content" : "*", 
+        "format" : "c-string"
+    },
+    "ascii_+": {
+        "type" : "str_block", 
+        "content" : "+", 
+        "format" : "c-string"
+    },
+    "ascii_,": {
+        "type" : "str_block", 
+        "content" : ",", 
+        "format" : "c-string"
+    },
+    "ascii_-": {
+        "type" : "str_block", 
+        "content" : "-", 
+        "format" : "c-string"
+    },
+    "ascii_.": {
+        "type" : "str_block", 
+        "content" : ".", 
+        "format" : "c-string"
+    },
+    "ascii_/": {
+        "type" : "str_block", 
+        "content" : "/", 
+        "format" : "c-string"
+    },
+    "ascii_:": {
+        "type" : "str_block", 
+        "content" : ":", 
+        "format" : "c-string"
+    },
+    "ascii_;": {
+        "type" : "str_block", 
+        "content" : ";", 
+        "format" : "c-string"
+    },
+    "ascii_<": {
+        "type" : "str_block", 
+        "content" : "<", 
+        "format" : "c-string"
+    },
+    "ascii_=": {
+        "type" : "str_block", 
+        "content" : "=", 
+        "format" : "c-string"
+    },
+    "ascii_>": {
+        "type" : "str_block", 
+        "content" : ">", 
+        "format" : "c-string"
+    },
+    "ascii_?": {
+        "type" : "str_block", 
+        "content" : "?", 
+        "format" : "c-string"
+    },
+    "ascii_@": {
+        "type" : "str_block", 
+        "content" : "@", 
+        "format" : "c-string"
+    },
+    "ascii_[": {
+        "type" : "str_block", 
+        "content" : "[", 
+        "format" : "c-string"
+    },
+    "ascii_\\": {
+        "type" : "str_block", 
+        "content" : "\\", 
+        "format" : "c-string"
+    },
+    "ascii_]": {
+        "type" : "str_block", 
+        "content" : "]", 
+        "format" : "c-string"
+    },
+    "ascii_^": {
+        "type" : "str_block", 
+        "content" : "^", 
+        "format" : "c-string"
+    },
+    "ascii__": {
+        "type" : "str_block", 
+        "content" : "_", 
+        "format" : "c-string"
+    },
+    "ascii_`": {
+        "type" : "str_block", 
+        "content" : "`", 
+        "format" : "c-string"
+    },
+    "ascii_{": {
+        "type" : "str_block", 
+        "content" : "{", 
+        "format" : "c-string"
+    },
+    "ascii_|": {
+        "type" : "str_block", 
+        "content" : "|", 
+        "format" : "c-string"
+    },
+    "ascii_}": {
+        "type" : "str_block", 
+        "content" : "}", 
+        "format" : "c-string"
+    },
+    "ascii_~": {
+        "type" : "str_block", 
+        "content" : "~", 
+        "format" : "c-string"
+    },
+    "ascii_ ": {
+        "type" : "str_block", 
+        "content" : " ", 
+        "format" : "c-string"
+    },
+    "ascii_\"": {
+        "type": "str_block",
+        "content": "\"",
+        "format": "c-string"
+    },
+    "ascii_char" : {
+        "type":"choice_block",
+        "blocks":["ascii_0","ascii_1","ascii_2","ascii_3","ascii_4","ascii_5","ascii_6","ascii_7","ascii_8","ascii_9","ascii_a","ascii_b","ascii_c","ascii_d","ascii_e","ascii_f","ascii_g","ascii_h","ascii_i","ascii_j","ascii_k","ascii_l","ascii_m","ascii_n","ascii_o","ascii_p","ascii_q","ascii_r","ascii_s","ascii_t","ascii_u","ascii_v","ascii_w","ascii_x","ascii_y","ascii_z","ascii_A","ascii_B","ascii_C","ascii_D","ascii_E","ascii_F","ascii_G","ascii_H","ascii_I","ascii_J","ascii_K","ascii_L","ascii_M","ascii_N","ascii_O","ascii_P","ascii_Q","ascii_R","ascii_S","ascii_T","ascii_U","ascii_V","ascii_W","ascii_X","ascii_Y","ascii_Z","ascii_!","ascii_#","ascii_$","ascii_%","ascii_&","ascii_'","ascii_(","ascii_)","ascii_*","ascii_+","ascii_,","ascii_.","ascii_/","ascii_:","ascii_;","ascii_<","ascii_=","ascii_>","ascii_?","ascii_@","ascii_\\","ascii_^","ascii__","ascii_`","ascii_{","ascii_|","ascii_}","ascii_~"]
+    },
+
+    "str" : {
+        "type" : "range_duplicate_block",
+        "block" : "ascii_char",
+        "range" : [1,40]
+    },
+    "commatized_str": {
+      "type": "multi_byte_block",
+      "byte_blocks": ["ascii_\"", "str", "ascii_\""]
+    },
+    "digit" : {
+        "type" : "choice_block",
+        "blocks" : ["ascii_0","ascii_1", "ascii_2", "ascii_3", "ascii_4", "ascii_5", "ascii_6", "ascii_7", "ascii_8", "ascii_8", "ascii_9"]
+    },
+
+    "int" : {
+        "type":"range_duplicate_block",
+        "block" : "digit",
+        "range" : [1,40]
+    },
+    "float":{
+        "type": "multi_byte_block",
+        "byte_blocks":["int", "ascii_.", "int"]
+    },
+    "key":{
+        "type" : "range_duplicate_block",
+        "block" : "ascii_char",
+        "range" : [1,40]
+    },
+    "value" : {
+        "type" : "choice_block",
+        "blocks" : ["commatized_str", "Bool", "int", "float"]
+
+    },
+    "pair" : {
+        "type": "multi_byte_block",
+        "byte_blocks":["commatized_str", "ascii_:", "value"]
+    },
+
+    "pair_with_comma" : {
+        "type": "multi_byte_block",
+        "byte_blocks":[ "commatized_str", "ascii_:", "value", "ascii_,"]
+    },
+    "pairs":{
+        "type": "range_duplicate_block",
+        "block": "pair",
+        "range": [1, 40]
+    },
+    "pairs_with_comma":{
+        "type": "range_duplicate_block",
+        "block": "pair_with_comma",
+        "range": [1,40]
+    },
+
+    "list":{
+        "type": "multi_byte_block",
+        "byte_blocks" : ["ascii_[","value", "ascii_]"]
+    },
+
+    "object": {
+        "type": "multi_byte_block",
+        "byte_blocks" : ["ascii_{", "pairs_with_comma", "pair", "ascii_}"]
+    },
+
+    "extended_value" : {
+        "type": "choice_block",
+        "blocks":["value", "object", "list"]
+    },
+    "extended_pair": {
+        "type" : "multi_byte_block",
+        "byte_blocks" : ["commatized_str", "ascii_:", "extended_value"]
+    },
+    "extended_pair_with_comma": {
+        "type" : "multi_byte_block",
+        "byte_blocks" : ["commatized_str", "ascii_:", "extended_value","ascii_,"]
+    },
+    "extended_pairs": {
+        "type" : "range_duplicate_block",
+        "block": "extended_pair_with_comma",
+        "range": [0,4]
+    },
+    "main_object": {
+        "type": "multi_byte_block",
+        "byte_blocks": ["extended_pairs", "extended_pair"]
+    },
+    main_template : {
+        "type": "multi_byte_block",
+        "byte_blocks": ["ascii_{", "main_object", "ascii_}"]
+    }
 }

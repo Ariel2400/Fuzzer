@@ -7,6 +7,7 @@ import re
 import pyjson5
 import random
 import os
+from dataclasses import dataclass
 
 T = TypeVar('T')
 
@@ -31,15 +32,14 @@ class Endian(Enum):
     LITTLE = 1
 
 
+@dataclass
 class GrammarType(Generic[T]):
-    def __init__(self, random: bool, size: int = None, val: T = None, endian: Endian = None, isBits: bool = False,
-                 format_string: str = None):
-        self.random = random
-        self.size = size
-        self.val = val
-        self.endian = endian
-        self.isBits = isBits
-        self.format_string = format_string
+    random: bool
+    format_string: str
+    val: T
+    endian: Endian=Endian.LITTLE
+    isBits: bool = False
+    size: int = 0
 
 
 class GrammarTemplate:
@@ -77,17 +77,17 @@ class GrammarTemplate:
     def createGrammarTemplateOfBlock(size=None, data=None, endian=None, isBits=False):
         arrayGrammarValues = []
 
-        if data == None:
+        if data is None:
             arrayGrammarValues += [GrammarType(random=True, size=size, isBits=isBits)]
         elif type(data) == int:
             endian_form = Endian.LITTLE
-            if endian != None:
+            if endian is not None:
                 endian_form = endian
             arrayGrammarValues += [GrammarType(random=False, size=size, val=data, endian=endian_form, isBits=isBits)]
         elif type(data) == str:
             if size > len(data):
                 arrayGrammarValues += [GrammarType(random=False, size=len(data), val=data, isBits=isBits)]
-                arrayGrammarValues += [GrammarType(random=True, size=size - len(data, isBits=isBits))]
+                arrayGrammarValues += [GrammarType(random=True, size=size - len(data), isBits=isBits)]
             else:
                 arrayGrammarValues += [GrammarType(random=False, size=size, val=data, isBits=isBits)]
 
@@ -126,8 +126,10 @@ class GrammarTemplate:
 
         # str_block
         elif json_string[start_block]["type"] == "str_block":
-            arrayGrammarValues.append(GrammarType(random=False, format_string=json_string[start_block]["format"],
-                                                  val=json_string[start_block]["content"]))
+            arrayGrammarValues.append(GrammarType(random=False,
+                                                  format_string=json_string[start_block]["format"],
+                                                  val=json_string[start_block]["content"],
+                                                  size=len(json_string[start_block]['content'])))
 
         # multi_bit_block
         elif json_string[start_block]["type"] == "multi_bit_block":
@@ -182,7 +184,7 @@ class GrammarTemplate:
         file_obj = open(path, 'wb')
         chars = string.punctuation + string.digits + string.ascii_letters
         for element in self.arrayOfGrammarValues:
-            if element.random == True:
+            if element.random:
                 val = ''.join(random.choice(chars) for i in range(element.size))
                 file_obj.write(strToBytes(val))
             else:
@@ -195,6 +197,6 @@ class GrammarTemplate:
                     endian = 'little'
                     if element.endian == Endian.BIG:
                         endian = 'big'
-                    val = (element.val).to_bytes(element.size, endian)
+                    val = element.val.to_bytes(element.size, endian)
                     file_obj.write(val)
         file_obj.close()
