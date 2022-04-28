@@ -114,8 +114,8 @@ class GrammarTemplate:
         elif json_string[start_block]["type"] == "range_byte_block":
             data = None
             endian = None
-            range = json_string[start_block]["range"]
-            size = random.randint(range[0], range[1])
+            range_array = json_string[start_block]["range"]
+            size = random.randint(range_array[0], range_array[1])
             if "data" in json_string[start_block]:
                 data = json_string[start_block]["data"]
             elif "data-func" in json_string[start_block]:
@@ -149,18 +149,20 @@ class GrammarTemplate:
 
         # duplicate_block
         elif json_string[start_block]["type"] == "duplicate_block":
-            size = json_string[start_block]["size"]
+            size = int(json_string[start_block]["size"])
             block = json_string[start_block]["block"]
-            blockTemplate = GrammarTemplate.createGrammarTemplateFromJsonString(json_string, block)
-            arrayGrammarValues += blockTemplate * size
+            for _ in range(size):
+                arrayGrammarValues += GrammarTemplate.createGrammarTemplateFromJsonString(json_string, block)
+            
 
         # range_duplicate_block
         elif json_string[start_block]["type"] == "range_duplicate_block":
             block = json_string[start_block]["block"]
-            range = json_string[start_block]["range"]
-            size = random.randint(range[0], range[1])
-            blockTemplate = GrammarTemplate.createGrammarTemplateFromJsonString(json_string, block)
-            arrayGrammarValues += blockTemplate * size
+            range_array = json_string[start_block]["range"]
+            size = random.randint(int(range_array[0]), int(range_array[1]))
+            for _ in range(size):
+                arrayGrammarValues += GrammarTemplate.createGrammarTemplateFromJsonString(json_string, block)
+            
 
         # choice_block
         elif json_string[start_block]["type"] == "choice_block":

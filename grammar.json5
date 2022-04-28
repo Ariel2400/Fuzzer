@@ -51,14 +51,14 @@
 
     //dynamic data type
     "range_duplicate_block_name" : {
-        "type" : "identifier of the block(string)(must be duplicate_block_block)",
+        "type" : "identifier of the block(string)(must be range_duplicate_block)",
         "block" : "block name for duplication, all types except multi_bit_block (string)(must)",
         "range" : "size of the range of the block(range:[min size(include), max size(not include)])(must)",
     },
 
     //choice_block
     "choice_block_name" : {
-        "type" : "identifier of the block(string)(must be block_choise)",
+        "type" : "identifier of the block(string)(must be choice_block)",
         "blocks" : "array of blocks, will choose random block(array)(must)",
     },
 
