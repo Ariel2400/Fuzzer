@@ -174,11 +174,14 @@ class GrammarTemplate:
 
     @staticmethod
     def createGrammarTemplateFromFile(jsonFileName):
-        objFile = open(jsonFileName, 'r')
-        decoded_json = pyjson5.decode_io(objFile, None, False)
+        objFileJson = open(jsonFileName, 'r')
+        objFileSchema = open(GrammarTemplate.JSON_SCHEMA_PATH, 'r')
+        decoded_json = pyjson5.decode_io(objFileJson, None, False)
+        decoded_schema = pyjson5.decode_io(objFileSchema, None, False)
+        if(not validateJson(decoded_json, decoded_schema)):
+            raise Exception("Schema validation failed!")
         if ("main_template" not in decoded_json):
-            print("dont have main_template block!")
-            return
+            raise Exception("dont have main_template block!")
 
         return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
 
