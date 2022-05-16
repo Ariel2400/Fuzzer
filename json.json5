@@ -493,7 +493,7 @@
     },
     "ascii_char" : {
         "type":"choice_block",
-        "blocks":["ascii_0","ascii_1","ascii_2","ascii_3","ascii_4","ascii_5","ascii_6","ascii_7","ascii_8","ascii_9","ascii_a","ascii_b","ascii_c","ascii_d","ascii_e","ascii_f","ascii_g","ascii_h","ascii_i","ascii_j","ascii_k","ascii_l","ascii_m","ascii_n","ascii_o","ascii_p","ascii_q","ascii_r","ascii_s","ascii_t","ascii_u","ascii_v","ascii_w","ascii_x","ascii_y","ascii_z","ascii_A","ascii_B","ascii_C","ascii_D","ascii_E","ascii_F","ascii_G","ascii_H","ascii_I","ascii_J","ascii_K","ascii_L","ascii_M","ascii_N","ascii_O","ascii_P","ascii_Q","ascii_R","ascii_S","ascii_T","ascii_U","ascii_V","ascii_W","ascii_X","ascii_Y","ascii_Z","ascii_!","ascii_#","ascii_$","ascii_%","ascii_&","ascii_'","ascii_(","ascii_)","ascii_*","ascii_+","ascii_,","ascii_.","ascii_/","ascii_:","ascii_;","ascii_<","ascii_=","ascii_>","ascii_?","ascii_@","ascii_\\","ascii_^","ascii__","ascii_`","ascii_{","ascii_|","ascii_}","ascii_~"]
+        "blocks":["ascii_0","ascii_1","ascii_2","ascii_3","ascii_4","ascii_5","ascii_6","ascii_7","ascii_8","ascii_9","ascii_a","ascii_b","ascii_c","ascii_d","ascii_e","ascii_f","ascii_g","ascii_h","ascii_i","ascii_j","ascii_k","ascii_l","ascii_m","ascii_n","ascii_o","ascii_p","ascii_q","ascii_r","ascii_s","ascii_t","ascii_u","ascii_v","ascii_w","ascii_x","ascii_y","ascii_z","ascii_A","ascii_B","ascii_C","ascii_D","ascii_E","ascii_F","ascii_G","ascii_H","ascii_I","ascii_J","ascii_K","ascii_L","ascii_M","ascii_N","ascii_O","ascii_P","ascii_Q","ascii_R","ascii_S","ascii_T","ascii_U","ascii_V","ascii_W","ascii_X","ascii_Y","ascii_Z","ascii_!","ascii_#","ascii_$","ascii_%","ascii_&","ascii_'","ascii_(","ascii_)","ascii_*","ascii_+","ascii_,","ascii_.","ascii_/","ascii_:","ascii_;","ascii_<","ascii_=","ascii_>","ascii_?","ascii_@","ascii_^","ascii__","ascii_`","ascii_{","ascii_|","ascii_}","ascii_~"]
     },
     "ascii_char_test": {
         "type": "byte_block",
@@ -513,10 +513,18 @@
         "blocks" : ["ascii_0","ascii_1", "ascii_2", "ascii_3", "ascii_4", "ascii_5", "ascii_6", "ascii_7", "ascii_8", "ascii_8", "ascii_9"]
     },
 
-    "int" : {
+    "int_with_zero" : {
         "type":"range_duplicate_block",
         "block" : "digit",
-        "range" : [1,40]
+        "range" : [0,40]
+    },
+    "digit_without_0" : {
+        "type" : "choice_block",
+        "blocks" : ["ascii_1", "ascii_2", "ascii_3", "ascii_4", "ascii_5", "ascii_6", "ascii_7", "ascii_8", "ascii_8", "ascii_9"]
+    },
+    "int": {
+        "type": "multi_byte_block",
+        "byte_blocks": ["digit_without_0", "int_with_zero"]
     },
     "float":{
         "type": "multi_byte_block",
@@ -531,6 +539,15 @@
         "type" : "choice_block",
         "blocks" : ["commatized_str", "Bool", "int", "float"]
 
+    },
+    "value_,": {
+        "type": "multi_byte_block",
+        "byte_blocks": ["value","ascii_,"]
+    },
+    "values": {
+        "type": "range_duplicate_block",
+        "block": "value_,",
+        "range": [0,40]
     },
     "pair" : {
         "type": "multi_byte_block",
@@ -554,7 +571,7 @@
 
     "list":{
         "type": "multi_byte_block",
-        "byte_blocks" : ["ascii_[","value", "ascii_]"]
+        "byte_blocks" : ["ascii_[","values","value", "ascii_]"]
     },
 
     "object": {
