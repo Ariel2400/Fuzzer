@@ -13,9 +13,10 @@ class SimpleFuzzer:
     def __init__(self, sample_dir_path, crashes_dir_path):
         self.sample_dir_path = sample_dir_path
         self.crashes_dir_path = crashes_dir_path
+        self.logger = logging.getLogger('Fuzzer info')
         self.samples = self.load_samples()
         self.amount_of_fuzzings = 0
-        logging.basicConfig(filename='fuzzer.log', filemode='w', format="%(name)s: %(levelname)s: %(message)s")
+        logging.basicConfig(level=logging.INFO)
 
     '''
     load all the samples into a data structure, without duplications.
@@ -33,7 +34,7 @@ class SimpleFuzzer:
             corpus.add(file_content)
             if len(corpus) != previous_corpus_size:
                 sample_content_dict[filename] = file_content
-        logging.debug("Added file contents to corpus")
+        self.logger.debug("Added file contents to corpus")
         return sample_content_dict
 
     ''' 
@@ -48,18 +49,17 @@ class SimpleFuzzer:
         assert isinstance(sample_name, str)
         # run the target on the sample content with args,
         # if crashed, document the crash in a file and put it in self.crashes_dir
-
         with open(file_save_fuzz_content, "wb") as fd:
             fd.write(content)
 
-        logging.debug(f'running following content: {target_command_line_args + [file_save_fuzz_content]}')
+        self.logger.debug(f'running following content: {target_command_line_args + [file_save_fuzz_content]}')
         sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
                               stdout=subprocess.DEVNULL,
                               stderr=subprocess.DEVNULL, )
 
         ret = sp.wait()
         if ret != 0:
-            logging.info(f"Exited with {ret}")
+            self.logger.info(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
                 # SIGSEGV - Invalid memory reference
@@ -98,34 +98,36 @@ class SimpleFuzzer:
         assert isinstance(target_command_line_args, list)
 
         start_time = time.time()
-        threading.Thread(target=self.print_statistics, args=[start_time]).start()
-        while True:
+        t = threading.Thread(target=self.print_statistics, args=[start_time])
+        t.start()
+        for _ in range(1000):
             sample_path = random.choice(list(self.samples.keys()))
             sample_content = bytearray(self.samples[sample_path])
 
             for _ in range(10):
-                mutations.Mutation3Choices.mutate(sample_content)
+                sample_content = mutations.Mutation3Choices.mutate(sample_content)
 
             self.fuzz("thd_0", sample_content, target_command_line_args, sample_path)
             self.amount_of_fuzzings += 1
+
 
     '''
     print to stdout the statistics about the fuzzing so far
     '''
 
     def print_statistics(self, start_time):
-        while True:
+        while self.amount_of_fuzzings < 1000:
             time.sleep(2)
             elapsed = time.time() - start_time
             fscp = float(self.amount_of_fuzzings) / elapsed
-            logging.info(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
+            self.logger.info(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
 
 
 if __name__ == '__main__':
     # fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples",
+    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples/test",
                         "crashes_json_C_impl")
     # fuzz_sample = list(fuzz.samples.keys())[0]
     # print("fuzzing on: ", fuzz_sample)
     # uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
-    fuzz.fuzz_worker(["./Json_Parsers/C_implementation/a.out"])
+    fuzz.fuzz_worker(["./Json_Parsers/cJSON/a.out"])

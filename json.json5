@@ -501,7 +501,7 @@
     },
     "str" : {
         "type" : "range_duplicate_block",
-        "block" : "ascii_char_test",
+        "block" : "ascii_char",
         "range" : [1,40]
     },
     "commatized_str": {

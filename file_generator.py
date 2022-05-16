@@ -2,7 +2,7 @@ from file_by_template import GrammarTemplate
 import sys
 import os
 
-NUM_OF_FILES = 1_000
+NUM_OF_FILES = 100
 
 if __name__ == '__main__':
     grammar_path, target_dir = sys.argv[1], sys.argv[2]
