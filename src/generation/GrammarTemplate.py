@@ -184,23 +184,28 @@ class GrammarTemplate:
 
         return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
 
-    def create_file(self, path):
+    def create_file(self, path: str):
         file_obj = open(path, 'wb')
+        file_obj.write(self.create_data())
+        file_obj.close()
+
+    def create_data(self) -> bytes:
+        result_data = b""
         chars = string.punctuation + string.digits + string.ascii_letters
         for element in self.arrayOfGrammarValues:
             if element.random:
                 val = ''.join(random.choice(chars) for i in range(element.size))
-                file_obj.write(strToBytes(val))
+                result_data += strToBytes(val)
             else:
                 if type(element.val) == str:
                     val = element.val
                     if len(val) > element.size:
                         val = val[:element.size]
-                    file_obj.write(strToBytes(val))
+                    result_data += strToBytes(val)
                 elif type(element.val) == int:
                     endian = 'little'
                     if element.endian == Endian.BIG:
                         endian = 'big'
                     val = element.val.to_bytes(element.size, endian)
-                    file_obj.write(val)
-        file_obj.close()
+                    result_data += val
+        return result_data

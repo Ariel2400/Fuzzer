@@ -7,6 +7,9 @@ class GrammarGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator):
         self.grammar_file_path = grammar_file_path
         self.grammar_template = GrammarTemplate.createGrammarTemplateFromFile(grammar_file_path, json_schema_file_path)
 
+    def generateData(self):
+        self.grammar_template.create_data()
+
 
     def generateFile(self, path: str):
         self.grammar_template.create_file(path)
