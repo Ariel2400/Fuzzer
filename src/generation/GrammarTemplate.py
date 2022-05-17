@@ -43,7 +43,6 @@ class GrammarType(Generic[T]):
 
 
 class GrammarTemplate:
-    JSON_SCHEMA_PATH = 'grammar-schema.json'
 
     def __init__(self, arrayOfGrammarValues: list):
         self.arrayOfGrammarValues = arrayOfGrammarValues
@@ -173,9 +172,9 @@ class GrammarTemplate:
         return arrayGrammarValues
 
     @staticmethod
-    def createGrammarTemplateFromFile(jsonFileName):
-        objFileJson = open(jsonFileName, 'r')
-        objFileSchema = open(GrammarTemplate.JSON_SCHEMA_PATH, 'r')
+    def createGrammarTemplateFromFile(jsonFilePath, jsonSchemaFilePath):
+        objFileJson = open(jsonFilePath, 'r')
+        objFileSchema = open(jsonSchemaFilePath, 'r')
         decoded_json = pyjson5.decode_io(objFileJson, None, False)
         decoded_schema = pyjson5.decode_io(objFileSchema, None, False)
         if(not validateJson(decoded_json, decoded_schema)):
@@ -205,9 +204,3 @@ class GrammarTemplate:
                     val = element.val.to_bytes(element.size, endian)
                     file_obj.write(val)
         file_obj.close()
-
-
-
-if __name__ == "__main__":
-    obj = GrammarTemplate.createGrammarTemplateFromFile("test.json")
-    obj.create_file("./0101010101")
