@@ -107,7 +107,7 @@ class SimpleFuzzer:
             for _ in range(10):
                 sample_content = mutations.Mutation3Choices.mutate(sample_content)
 
-            self.fuzz("thd_0", sample_content, target_command_line_args, sample_path)
+            self.fuzz("thd_0.json", sample_content, target_command_line_args, sample_path)
             self.amount_of_fuzzings += 1
 
 
@@ -129,5 +129,5 @@ if __name__ == '__main__':
                         "crashes_json_C_impl")
     # fuzz_sample = list(fuzz.samples.keys())[0]
     # print("fuzzing on: ", fuzz_sample)
-    # uzz.fuzz("thd_0", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
+    # uzz.fuzz("thd_0.json", fuzz.samples[fuzz_sample], ["objdump", "-d"], fuzz_sample)
     fuzz.fuzz_worker(["./Json_Parsers/cJSON/a.out"])

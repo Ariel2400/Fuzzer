@@ -537,7 +537,7 @@
     },
     "value" : {
         "type" : "choice_block",
-        "blocks" : ["commatized_str", "Bool", "int", "float"]
+        "blocks" : ["commatized_str", "Bool", "int", "float", "null_block"]
 
     },
     "value_,": {
@@ -573,7 +573,11 @@
         "type": "multi_byte_block",
         "byte_blocks" : ["ascii_[","values","value", "ascii_]"]
     },
-
+    "null_block": {
+        "type": "str_block",
+        "content": "null",
+        "format": "c-string"
+    },
     "object": {
         "type": "multi_byte_block",
         "byte_blocks" : ["ascii_{", "pairs_with_comma", "pair", "ascii_}"]
