@@ -1,5 +1,5 @@
 from src.FileGenerator import AbstractBaseFileGenerator
-from src.mutation.mutations import BaseMutation, SimpleMutation
+from src.mutation.mutations import BaseMutation
 import glob
 import random
 import os
