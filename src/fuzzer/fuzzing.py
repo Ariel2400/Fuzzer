@@ -5,11 +5,11 @@ import hashlib
 import random
 import time
 import threading
-import mutations
+import mutation.mutations as mutations
 import logging
 
 
-class SimpleFuzzer:
+class BaseFuzzer:
     def __init__(self, sample_dir_path, crashes_dir_path):
         self.sample_dir_path = sample_dir_path
         self.crashes_dir_path = crashes_dir_path
@@ -124,8 +124,8 @@ class SimpleFuzzer:
 
 
 if __name__ == '__main__':
-    # fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples/test",
+    # fuzz = BaseFuzzer("corpus", "crashes")
+    fuzz = BaseFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples/test",
                         "crashes_json_C_impl")
     # fuzz_sample = list(fuzz.samples.keys())[0]
     # print("fuzzing on: ", fuzz_sample)
