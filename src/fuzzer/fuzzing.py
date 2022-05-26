@@ -5,6 +5,7 @@ import time
 import threading
 import logging
 from src.FileGenerator.AbstractBaseFileGenerator import AbstractBaseFileGenerator
+from typing import Union
 
 class Fuzzer:
     def __init__(self, file_generator: AbstractBaseFileGenerator, crashes_dir_path):
@@ -71,18 +72,32 @@ class Fuzzer:
     iterate over samples and fuzz them
     '''
 
-    def fuzz_worker(self, target_command_line_args, fuzz_cycles: int):
+    def fuzz_worker(self, target_command_line_args, fuzz_cycles: Union[int, None]):
         assert isinstance(target_command_line_args, list)
 
         start_time = time.time()
         t = threading.Thread(target=self.print_statistics, args=[start_time, fuzz_cycles])
         t.start()
-        for _ in range(fuzz_cycles):
-            input_file_content = self.file_generator.generateData()
-
-            self.fuzz("thd_0", input_file_content, target_command_line_args)
-            self.amount_of_fuzzings += 1
+        
+        #Infinity fuzzing
+        if fuzz_cycles == None:
+            while True:
+                self.generate_fuzz(target_command_line_args)
+        
+        #Finity fuzzing
+        else:
+            for _ in range(fuzz_cycles):
+                self.generate_fuzz(target_command_line_args)
+            
         t.join()
+
+
+    def generate_fuzz(self, target_command_line_args):
+        input_file_content = self.file_generator.generateData()
+        
+        self.fuzz("thd_0", input_file_content, target_command_line_args)
+        self.amount_of_fuzzings += 1
+
 
 
     '''
