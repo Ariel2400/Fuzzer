@@ -21,7 +21,8 @@ class Validator:
             assert Exception("target does not exist")
         if not fuzz_amount.isnumeric():
             assert Exception("fuzz_amount not a number")
-
+        if fuzz_amount < 0:
+            assert Exception("fuzz amount should be positive")
         return True
 
 
@@ -41,6 +42,8 @@ class Validator:
             assert Exception("target does not exist")
         if not fuzz_amount.isnumeric():
             assert Exception("fuzz_amount not a number")
+        if fuzz_amount < 0:
+            assert Exception("fuzz amount should be positive")
         return True
 
 
@@ -55,5 +58,7 @@ class Validator:
             assert Exception("target does not exist")
         if not fuzz_amount.isnumeric():
             assert Exception("fuzz_amount not a number")
+        if fuzz_amount < 0:
+            assert Exception("fuzz amount should be positive")
 
         return True
