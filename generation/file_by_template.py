@@ -6,8 +6,9 @@ import random
 import re
 import pyjson5
 import random
-import os
 from dataclasses import dataclass
+
+from database.my_producer import MyProducer
 
 T = TypeVar('T')
 
@@ -47,7 +48,7 @@ class GrammarTemplate:
 
     def __init__(self, arrayOfGrammarValues: list):
         self.arrayOfGrammarValues = arrayOfGrammarValues
-
+        self.kafkaProducer = MyProducer()
     @staticmethod
     def computeGrammarFunction(json_string, function_string):
         function_string = function_string.replace(' ', '')
@@ -186,25 +187,29 @@ class GrammarTemplate:
         return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
 
     def create_file(self, path):
-        file_obj = open(path, 'wb')
+        buffer = b''
+        
         chars = string.punctuation + string.digits + string.ascii_letters
         for element in self.arrayOfGrammarValues:
             if element.random:
                 val = ''.join(random.choice(chars) for i in range(element.size))
-                file_obj.write(strToBytes(val))
+                buffer += strToBytes(val)
             else:
                 if type(element.val) == str:
                     val = element.val
                     if len(val) > element.size:
                         val = val[:element.size]
-                    file_obj.write(strToBytes(val))
+                    buffer += strToBytes(val)
                 elif type(element.val) == int:
                     endian = 'little'
                     if element.endian == Endian.BIG:
                         endian = 'big'
                     val = element.val.to_bytes(element.size, endian)
-                    file_obj.write(val)
-        file_obj.close()
+                    buffer += strToBytes(val)
+        self.kafkaProducer.send_file(buffer)
+    
+    def close_kafka(self):
+        self.kafkaProducer.close()
 
 
 
