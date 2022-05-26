@@ -1,6 +1,6 @@
 import enum
 
 class FuzzTypes(enum.Enum):
-    mutation = 1
-    generation = 2
-    symbolic_execution = 3
+    mutation = "mutation"
+    generation = "generation"
+    symbolic_execution = "symbolic_execution"
