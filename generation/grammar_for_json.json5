@@ -632,10 +632,10 @@
     },
     "main_object": {
         "type": "multi_byte_block",
-        "byte_blocks": ["extended_pairs", "extended_pair"]
+        "byte_blocks": ["ascii_{","extended_pairs", "extended_pair","ascii_}"]
     },
     main_template : {
-        "type": "multi_byte_block",
-        "byte_blocks": ["ascii_{", "main_object", "ascii_}"]
+        "type": "choice_block",
+        "blocks": ["main_object","list", "value"]
     }
 }
