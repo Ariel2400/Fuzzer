@@ -21,9 +21,9 @@
         "format":"c-string"
     },
     "ascii_0": {
-	"type" : "str_block", 
-	"content" : "0", 
-	"format" : "c-string"
+	    "type" : "str_block", 
+	    "content" : "0", 
+	    "format" : "c-string"
     },
     "ascii_1": {
         "type" : "str_block", 
@@ -535,9 +535,9 @@
     },
     "int": {
         "type": "multi_byte_block",
-        "byte_blocks": ["int_math_sign","digit_without_0", "int_with_zero"]
+        "byte_blocks": ["int_math_sign","digit_without_0","int_with_zero"]
     },
-    "int_or_zero_for_float:{
+    "int_or_zero_for_float":{
         "type":"choice_block",
         "blocks":["int", "ascii_0"]
     },
@@ -572,8 +572,7 @@
     },
     "value" : {
         "type" : "choice_block",
-        "blocks" : ["commatized_str", "Bool", "number", "null_block", "main_template", "list"]
-
+        "blocks" : ["commatized_str", "Bool", "number", "null_block", "main_object", "list"]
     },
     "value_,": {
         "type": "multi_byte_block",

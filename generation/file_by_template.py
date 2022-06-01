@@ -8,7 +8,7 @@ import pyjson5
 import random
 from dataclasses import dataclass
 
-from database.my_producer import MyProducer
+#from database.my_producer import MyProducer
 
 T = TypeVar('T')
 
@@ -48,7 +48,7 @@ class GrammarTemplate:
 
     def __init__(self, arrayOfGrammarValues: list):
         self.arrayOfGrammarValues = arrayOfGrammarValues
-        self.kafkaProducer = MyProducer()
+        # self.kafkaProducer = MyProducer()
     @staticmethod
     def computeGrammarFunction(json_string, function_string):
         function_string = function_string.replace(' ', '')
@@ -206,7 +206,9 @@ class GrammarTemplate:
                         endian = 'big'
                     val = element.val.to_bytes(element.size, endian)
                     buffer += strToBytes(val)
-        self.kafkaProducer.send_file(buffer)
+        with open(path, 'wb') as f:
+            f.write(buffer)
+        #self.kafkaProducer.send_file(buffer)
     
     def close_kafka(self):
         self.kafkaProducer.close()
@@ -214,5 +216,11 @@ class GrammarTemplate:
 
 
 if __name__ == "__main__":
-    obj = GrammarTemplate.createGrammarTemplateFromFile("test.json")
-    obj.create_file("./0101010101")
+    
+    for i in range(10_000):
+        try:
+            print(f'writing {i}/10000')
+            obj = GrammarTemplate.createGrammarTemplateFromFile("./grammar_for_json.json5")
+            obj.create_file(f"./jsons/{i}.json")
+        except RecursionError:
+            continue
