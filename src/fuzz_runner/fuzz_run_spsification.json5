@@ -1,0 +1,23 @@
+{
+    "fuzz_type": "mutation/generation/symbolic (must specify)",
+
+    //for mutation:
+    "target": "string (must specify)",
+    "crashes_dir_path": "string (must specify)",
+    "sample_dir_path": "string (must specify)",
+    "fuzz_amount": "int (optional, if not specified fuzzing will not stop)",
+    "snapshot_fuzzing_enable": "boolean (optional, if not specified automatically false)",
+    
+    //for generation:
+    "target": "string (must specify)",
+    "crashes_dir_path": "string (must specify)",
+    "grammar_file_path": "string (must specify)",
+    "fuzz_amount": "int (optional, if not specified fuzzing will not stop)",
+    "snapshot_fuzzing_enable": "boolean (optional, if not specified automatically false)",
+
+    //for symbolic
+    "target": "string (must specify)",
+    "crashes_dir_path": "string (must specify)",
+    "fuzz_amount": "int (optional, if not specified fuzzing will not stop)",
+    "snapshot_fuzzing_enable": "boolean (optional, if not specified automatically false)"
+}
