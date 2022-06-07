@@ -1,4 +1,4 @@
-from src.common.consts import FuzzTypes
+from common.consts import FuzzTypes
 import os
 
 class Validator:
