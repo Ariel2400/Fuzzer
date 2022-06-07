@@ -5,9 +5,9 @@ from enum import Enum
 import random
 import re
 import pyjson5
-import random
 import os
 from dataclasses import dataclass
+from datetime import datetime
 
 T = TypeVar('T')
 
@@ -43,10 +43,19 @@ class GrammarType(Generic[T]):
 
 
 class GrammarTemplate:
-    JSON_SCHEMA_PATH = 'grammar-schema.json'
 
-    def __init__(self, arrayOfGrammarValues: list):
-        self.arrayOfGrammarValues = arrayOfGrammarValues
+
+    def __init__(self, jsonFilePath, jsonSchemaFilePath):
+        self.arrayOfGrammarValues = []
+        self.objFileJson = open(jsonFilePath, 'r')
+        self.objFileSchema = open(jsonSchemaFilePath, 'r')
+        self.decoded_json = pyjson5.decode_io(self.objFileJson, None, False)
+        self.decoded_schema = pyjson5.decode_io(self.objFileSchema, None, False)
+        if(not validateJson(self.decoded_json, self.decoded_schema)):
+            raise Exception("Schema validation failed!")
+        if ("main_template" not in self.decoded_json):
+            raise Exception("dont have main_template block!")
+
 
     @staticmethod
     def computeGrammarFunction(json_string, function_string):
@@ -172,42 +181,30 @@ class GrammarTemplate:
 
         return arrayGrammarValues
 
-    @staticmethod
-    def createGrammarTemplateFromFile(jsonFileName):
-        objFileJson = open(jsonFileName, 'r')
-        objFileSchema = open(GrammarTemplate.JSON_SCHEMA_PATH, 'r')
-        decoded_json = pyjson5.decode_io(objFileJson, None, False)
-        decoded_schema = pyjson5.decode_io(objFileSchema, None, False)
-        if(not validateJson(decoded_json, decoded_schema)):
-            raise Exception("Schema validation failed!")
-        if ("main_template" not in decoded_json):
-            raise Exception("dont have main_template block!")
 
-        return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
-
-    def create_file(self, path):
+    def create_file(self, path: str):
         file_obj = open(path, 'wb')
+        file_obj.write(self.create_data())
+        file_obj.close()
+
+    def create_data(self) -> bytes:
+        self.arrayOfGrammarValues = GrammarTemplate.createGrammarTemplateFromJsonString(self.decoded_json, "main_template")
+        result_data = b""
         chars = string.punctuation + string.digits + string.ascii_letters
         for element in self.arrayOfGrammarValues:
             if element.random:
                 val = ''.join(random.choice(chars) for i in range(element.size))
-                file_obj.write(strToBytes(val))
+                result_data += strToBytes(val)
             else:
                 if type(element.val) == str:
                     val = element.val
                     if len(val) > element.size:
                         val = val[:element.size]
-                    file_obj.write(strToBytes(val))
+                    result_data += strToBytes(val)
                 elif type(element.val) == int:
                     endian = 'little'
                     if element.endian == Endian.BIG:
                         endian = 'big'
                     val = element.val.to_bytes(element.size, endian)
-                    file_obj.write(val)
-        file_obj.close()
-
-
-
-if __name__ == "__main__":
-    obj = GrammarTemplate.createGrammarTemplateFromFile("test.json")
-    obj.create_file("./0101010101")
+                    result_data += val
+        return result_data
