@@ -1,10 +1,13 @@
 import glob
 import subprocess
 import os
+import sys
 import hashlib
 import random
 import time
 import threading
+mutations_dir_path = os.path.abspath('./mutation')
+sys.path.insert(0, mutations_dir_path)
 import mutations
 import logging
 
@@ -100,7 +103,7 @@ class SimpleFuzzer:
         start_time = time.time()
         t = threading.Thread(target=self.print_statistics, args=[start_time])
         t.start()
-        for _ in range(1000):
+        for _ in range(10_000):
             sample_path = random.choice(list(self.samples.keys()))
             sample_content = bytearray(self.samples[sample_path])
 
@@ -125,7 +128,7 @@ class SimpleFuzzer:
 
 if __name__ == '__main__':
     # fuzz = SimpleFuzzer("corpus", "crashes")
-    fuzz = SimpleFuzzer("/Users/arielgrosh/PycharmProjects/Fuzzer/json_samples/test",
+    fuzz = SimpleFuzzer('/Users/arielgrosh/PycharmProjects/Fuzzer/generation/jsons',
                         "crashes_json_C_impl")
     # fuzz_sample = list(fuzz.samples.keys())[0]
     # print("fuzzing on: ", fuzz_sample)

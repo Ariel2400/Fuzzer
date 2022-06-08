@@ -217,7 +217,7 @@ class GrammarTemplate:
 
 if __name__ == "__main__":
     
-    for i in range(10_000):
+    for i in range(1_000_000):
         try:
             print(f'writing {i}/10000')
             obj = GrammarTemplate.createGrammarTemplateFromFile("./grammar_for_json.json5")
