@@ -22,7 +22,7 @@ class Fuzzer:
         self.fuzz_lock = threading.Lock()
         logging.basicConfig(level=logging.INFO)
 
-   
+
     ''' 
     create a new file with content and run it on the target_command_line 
     target command line args is in the format: [[target], [-args]].
@@ -36,13 +36,13 @@ class Fuzzer:
         # if crashed, document the crash in a file and put it in self.crashes_dir
         with open(file_save_fuzz_content, "wb") as fd:
             fd.write(content)
-    
+
         sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
                               stdout=subprocess.DEVNULL,
                               stderr=subprocess.DEVNULL, )
 
         ret = sp.wait()
-        
+
         if ret != 0:
             self.logger.info(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
@@ -81,14 +81,14 @@ class Fuzzer:
 
     def fuzz_worker(self, target_command_line_args, fuzz_cycles: Union[int, None], threads_number: Union[int, None]):
         assert isinstance(target_command_line_args, list)
-        
+
         if(threads_number == None):
             threads_number = multiprocessing.cpu_count() * 2
-    
+
         start_time = time.time()
         t_statistics = threading.Thread(target=self.print_statistics, args=[start_time])
         t_statistics.start()
-        
+
         fuzz_threads = []
 
         for thread_number in range(threads_number):
@@ -106,7 +106,7 @@ class Fuzzer:
         if fuzz_cycles == None:
             while True:
                 self.generate_fuzz(thread_number, target_command_line_args)
-        
+
         #Finity fuzzing
         else:
             while True and not self.stop:

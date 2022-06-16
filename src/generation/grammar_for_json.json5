@@ -15,11 +15,15 @@
         "type":"choice_block",
         "blocks":["false_block", "true_block"]
     },
-
+    "empty_str":{
+        "type":"str_block",
+        "content":"",
+        "format":"c-string"
+    },
     "ascii_0": {
-	"type" : "str_block", 
-	"content" : "0", 
-	"format" : "c-string"
+	    "type" : "str_block", 
+	    "content" : "0", 
+	    "format" : "c-string"
     },
     "ascii_1": {
         "type" : "str_block", 
@@ -508,11 +512,18 @@
       "type": "multi_byte_block",
       "byte_blocks": ["ascii_\"", "str", "ascii_\""]
     },
+    "int_math_sign":{
+        "type":"choice_block",
+        "blocks":["empty_str","ascii_-"]
+    },
+    "exp_math_sign":{
+        "type":"choice_block",
+        "blocks":["ascii_+", "ascii_-"]
+    },
     "digit" : {
         "type" : "choice_block",
         "blocks" : ["ascii_0","ascii_1", "ascii_2", "ascii_3", "ascii_4", "ascii_5", "ascii_6", "ascii_7", "ascii_8", "ascii_8", "ascii_9"]
     },
-
     "int_with_zero" : {
         "type":"range_duplicate_block",
         "block" : "digit",
@@ -524,11 +535,35 @@
     },
     "int": {
         "type": "multi_byte_block",
-        "byte_blocks": ["digit_without_0", "int_with_zero"]
+        "byte_blocks": ["int_math_sign","digit_without_0","int_with_zero"]
+    },
+    "int_or_zero_for_float":{
+        "type":"choice_block",
+        "blocks":["int", "ascii_0"]
     },
     "float":{
         "type": "multi_byte_block",
-        "byte_blocks":["int", "ascii_.", "int"]
+        "byte_blocks":["int_or_zero_for_float", "ascii_.", "int_with_zero"]
+    },
+    "exponent_base":{
+        "type":"choice_block",
+        "blocks":["int", "float"]
+    },
+    "exponent_number":{
+        "type":"multi_byte_block",
+        "byte_blocks":["exp_math_sign", "int_with_zero"]
+    },
+    "exp_char":{
+        "type":"choice_block",
+        "blocks":["ascii_e", "ascii_E"]
+    },
+    "exponent":{
+        "type":"multi_byte_block",
+        "byte_blocks":["exponent_base", "exp_char", "exponent_number"]
+    },
+    "number":{
+        "type":"choice_block",
+        "blocks":["int","float","exponent"]
     },
     "key":{
         "type" : "range_duplicate_block",
@@ -537,8 +572,7 @@
     },
     "value" : {
         "type" : "choice_block",
-        "blocks" : ["commatized_str", "Bool", "int", "float"]
-
+        "blocks" : ["commatized_str", "Bool", "number", "null_block", "main_object", "list"]
     },
     "value_,": {
         "type": "multi_byte_block",
@@ -573,23 +607,22 @@
         "type": "multi_byte_block",
         "byte_blocks" : ["ascii_[","values","value", "ascii_]"]
     },
-
+    "null_block": {
+        "type": "str_block",
+        "content": "null",
+        "format": "c-string"
+    },
     "object": {
         "type": "multi_byte_block",
         "byte_blocks" : ["ascii_{", "pairs_with_comma", "pair", "ascii_}"]
     },
-
-    "extended_value" : {
-        "type": "choice_block",
-        "blocks":["value", "object", "list"]
-    },
     "extended_pair": {
         "type" : "multi_byte_block",
-        "byte_blocks" : ["commatized_str", "ascii_:", "extended_value"]
+        "byte_blocks" : ["commatized_str", "ascii_:", "value"]
     },
     "extended_pair_with_comma": {
         "type" : "multi_byte_block",
-        "byte_blocks" : ["commatized_str", "ascii_:", "extended_value","ascii_,"]
+        "byte_blocks" : ["commatized_str", "ascii_:", "value","ascii_,"]
     },
     "extended_pairs": {
         "type" : "range_duplicate_block",
@@ -598,10 +631,10 @@
     },
     "main_object": {
         "type": "multi_byte_block",
-        "byte_blocks": ["extended_pairs", "extended_pair"]
+        "byte_blocks": ["ascii_{","extended_pairs", "extended_pair","ascii_}"]
     },
     main_template : {
-        "type": "multi_byte_block",
-        "byte_blocks": ["ascii_{", "main_object", "ascii_}"]
+        "type": "choice_block",
+        "blocks": ["main_object","list", "value"]
     }
 }
