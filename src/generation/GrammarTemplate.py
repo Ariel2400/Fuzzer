@@ -5,10 +5,9 @@ from enum import Enum
 import random
 import re
 import pyjson5
-import random
+import os
 from dataclasses import dataclass
-
-#from database.my_producer import MyProducer
+from datetime import datetime
 
 T = TypeVar('T')
 
@@ -44,11 +43,20 @@ class GrammarType(Generic[T]):
 
 
 class GrammarTemplate:
-    JSON_SCHEMA_PATH = 'grammar-schema.json'
 
-    def __init__(self, arrayOfGrammarValues: list):
-        self.arrayOfGrammarValues = arrayOfGrammarValues
-        # self.kafkaProducer = MyProducer()
+
+    def __init__(self, jsonFilePath, jsonSchemaFilePath):
+        self.arrayOfGrammarValues = []
+        self.objFileJson = open(jsonFilePath, 'r')
+        self.objFileSchema = open(jsonSchemaFilePath, 'r')
+        self.decoded_json = pyjson5.decode_io(self.objFileJson, None, False)
+        self.decoded_schema = pyjson5.decode_io(self.objFileSchema, None, False)
+        if(not validateJson(self.decoded_json, self.decoded_schema)):
+            raise Exception("Schema validation failed!")
+        if ("main_template" not in self.decoded_json):
+            raise Exception("dont have main_template block!")
+
+
     @staticmethod
     def computeGrammarFunction(json_string, function_string):
         function_string = function_string.replace(' ', '')
@@ -173,54 +181,30 @@ class GrammarTemplate:
 
         return arrayGrammarValues
 
-    @staticmethod
-    def createGrammarTemplateFromFile(jsonFileName):
-        objFileJson = open(jsonFileName, 'r')
-        objFileSchema = open(GrammarTemplate.JSON_SCHEMA_PATH, 'r')
-        decoded_json = pyjson5.decode_io(objFileJson, None, False)
-        decoded_schema = pyjson5.decode_io(objFileSchema, None, False)
-        if(not validateJson(decoded_json, decoded_schema)):
-            raise Exception("Schema validation failed!")
-        if ("main_template" not in decoded_json):
-            raise Exception("dont have main_template block!")
 
-        return GrammarTemplate(GrammarTemplate.createGrammarTemplateFromJsonString(decoded_json, "main_template"))
+    def create_file(self, path: str):
+        file_obj = open(path, 'wb')
+        file_obj.write(self.create_data())
+        file_obj.close()
 
-    def create_file(self, path):
-        buffer = b''
-        
+    def create_data(self) -> bytes:
+        self.arrayOfGrammarValues = GrammarTemplate.createGrammarTemplateFromJsonString(self.decoded_json, "main_template")
+        result_data = b""
         chars = string.punctuation + string.digits + string.ascii_letters
         for element in self.arrayOfGrammarValues:
             if element.random:
                 val = ''.join(random.choice(chars) for i in range(element.size))
-                buffer += strToBytes(val)
+                result_data += strToBytes(val)
             else:
                 if type(element.val) == str:
                     val = element.val
                     if len(val) > element.size:
                         val = val[:element.size]
-                    buffer += strToBytes(val)
+                    result_data += strToBytes(val)
                 elif type(element.val) == int:
                     endian = 'little'
                     if element.endian == Endian.BIG:
                         endian = 'big'
                     val = element.val.to_bytes(element.size, endian)
-                    buffer += strToBytes(val)
-        with open(path, 'wb') as f:
-            f.write(buffer)
-        #self.kafkaProducer.send_file(buffer)
-    
-    def close_kafka(self):
-        self.kafkaProducer.close()
-
-
-
-if __name__ == "__main__":
-    
-    for i in range(1_000_000):
-        try:
-            print(f'writing {i}/10000')
-            obj = GrammarTemplate.createGrammarTemplateFromFile("./grammar_for_json.json5")
-            obj.create_file(f"./jsons/{i}.json")
-        except RecursionError:
-            continue
+                    result_data += val
+        return result_data
