@@ -2,7 +2,6 @@ import subprocess
 import os
 import hashlib
 import time
-import threading
 import logging
 from FileGenerator.AbstractBaseFileGenerator import AbstractBaseFileGenerator
 from typing import Union
