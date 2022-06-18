@@ -21,5 +21,5 @@ class Producer:
         self._producer.flush()
         self._producer.close()
     
-    def send_file(self, object: bytes) -> None:
+    def send(self, object: bytes) -> None:
         self._producer.send('Samples', object)
