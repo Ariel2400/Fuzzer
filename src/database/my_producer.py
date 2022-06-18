@@ -5,7 +5,7 @@ import subprocess as sp
 import logging
 
 producer_logger = logging.getLogger('Kafka Producer')
-class MyProducer:
+class Producer:
     def __init__(self) -> None:
         
         p_zoo = sp.run('bin/zookeeper-server-start.sh config/zookeeper.properties')
