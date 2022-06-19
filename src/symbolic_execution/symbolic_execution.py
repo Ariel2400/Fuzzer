@@ -1,10 +1,18 @@
 import time
 import angr
 import claripy
-from consts import BITS_IN_BYTE, SymbolicExecutionProperties
 import threading
 import random
+from collections import namedtuple
 
+BITS_IN_BYTE = 8
+#SymbolicExecutionProperties = namedtuple('SymbolicExecutionProperties', ['load_dynamic_libaries', 'len_symbolic_bytes'])
+
+class SymbolicExecutionProperties:
+
+    def __init__(self, len_symbolic_bytes, load_dynamic_libaries):
+        self.load_dynamic_libaries = load_dynamic_libaries
+        self.len_symbolic_bytes = len_symbolic_bytes
 class State:
 
     def __init__(self, angrState, satisfiable):
@@ -24,7 +32,12 @@ class SymbolicExecution:
     
     #returning target input to reach a random basic block
     def getTargetInput(self):
-        input_sym_chars = [claripy.BVS('input_%d', BITS_IN_BYTE) for i in range(self.symbolic_execution_properties.len_symbolic_bits)]
+        print("before prop")
+        print(self.symbolic_execution_properties.len_symbolic_bytes, type(self.symbolic_execution_properties.len_symbolic_bytes))
+        print("before prop")
+        print("before")
+        input_sym_chars = [claripy.BVS('input_%d', BITS_IN_BYTE) for i in range(self.symbolic_execution_properties.len_symbolic_bytes)]
+        print("after")
         input_sym = claripy.Concat(*input_sym_chars)
         entry_state = self.proj.factory.entry_state(args=[self.target] + self.command_line_args, add_options=angr.options.unicorn , stdin=input_sym) 
         addStatesThread = threading.Thread(target=self.addStates, args=(entry_state,))
@@ -86,7 +99,7 @@ class SymbolicExecution:
 
 
 if __name__ == '__main__':
-    symbolicExecutionProperties = SymbolicExecutionProperties(False, 4)
+    symbolicExecutionProperties = SymbolicExecutionProperties(4, False)
     #symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/usr/bin/jq', ['.'])
     symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/home/tomer/code/a.out', ['flag1'])
     generator = symbolicExecution.getTargetInput()

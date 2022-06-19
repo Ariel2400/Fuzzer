@@ -8,7 +8,7 @@ class GrammarFileGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator):
         self.json_schema_file_path = json_schema_file_path
         self.grammar_template = GrammarTemplate(self.grammar_file_path, self.json_schema_file_path)
 
-    def generateData(self):
+    def generateData(self) -> bytes:
         return self.grammar_template.create_data()
 
 

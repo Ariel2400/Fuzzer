@@ -1,6 +1,6 @@
 
 from symbolic_execution.symbolic_execution import SymbolicExecution
-from kafka.producer import Producer
+from kafka_handlers.producer import Producer
 import threading
 
 class SymbolicExecutionProducer:

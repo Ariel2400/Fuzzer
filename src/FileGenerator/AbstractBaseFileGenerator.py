@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class AbstractBaseFileGenerator(ABC):
 
     @abstractmethod
-    def generateData(self) -> bytearray:
+    def generateData(self) -> bytes:
         pass
 
     @abstractmethod
