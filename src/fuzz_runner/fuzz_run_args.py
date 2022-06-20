@@ -44,11 +44,14 @@ class GenerationFuzzRunArgs(FuzzRunArgs):
     def __init__(self):
         super().__init__()
         self.parser.add_argument("--grammar_file_path", help="grammar_file_path for generate samples", required=True)
+        self.parser.add_argument("--mutation", help="mix mutation after generation", action="store_true")
         self.args, self.unknown = self.parser.parse_known_args()
 
     def getGrammarFilePath(self):
         return self.args.grammar_file_path
 
+    def getMutation(self):
+        return self.args.mutation
 class SymbolicFuzzRunArgs(FuzzRunArgs):
 
     def __init__(self):
