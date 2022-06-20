@@ -25,7 +25,7 @@ def main():
     elif fuzz_type == "generation":
         fuzz_run_args = GenerationFuzzRunArgs()
         schema_path = "./src/generation/grammar-schema.json"
-        file_generator = GrammarFileGenerator(fuzz_run_args.getGrammarFilePath(), schema_path)
+        file_generator = GrammarFileGenerator(fuzz_run_args.getGrammarFilePath(), schema_path, fuzz_run_args.getMutation())
     elif fuzz_type == "symbolic_execution":
         fuzz_run_args = SymbolicFuzzRunArgs()
         pass
