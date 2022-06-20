@@ -53,4 +53,10 @@ class Mutation3Choices(BaseMutation):
 
         selected_mutator = random.choice(choices)
         index = random.randint(0, len(input_data) - 1)
-        return selected_mutator(input_data, index)
+        return selected_mutator(self, input_data, index)
+
+
+    def mutateCycles(self, input_data: bytearray, cycles: int) -> bytearray:
+        for _ in range(cycles):
+            input_data = self.mutate(input_data)
+        return input_data

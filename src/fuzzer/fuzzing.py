@@ -43,7 +43,7 @@ class Fuzzer:
 
         ret = sp.wait()
 
-        if ret != 0:
+        if ret < 0:
             self.logger.info(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
