@@ -39,7 +39,7 @@ def main():
         kafkaProducer = Producer()
         symbolicExecutionProducer = SymbolicExecutionProducer(symbolicExecutionEngine, kafkaProducer)
         symbolicExecutionProducer.startProduce()
-        file_generator = SymbolicExecutionGenerator()
+        file_generator = SymbolicExecutionGenerator(symbolicExecutionProducer)
 
 
     fuzzer = Fuzzer(file_generator, fuzz_run_args.getCrashesDirPath())
