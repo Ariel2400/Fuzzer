@@ -43,7 +43,7 @@ def main():
 
 
     fuzzer = Fuzzer(file_generator, fuzz_run_args.getCrashesDirPath())
-    fuzzer.fuzz_worker([fuzz_run_args.getTarget()] + fuzz_run_args.getTargetArgs(), fuzz_run_args.getFuzzAmount(), fuzz_run_args.getThreadsNumber())
+    fuzzer.fuzz_worker([fuzz_run_args.getTarget()] + fuzz_run_args.getTargetArgs(), fuzz_run_args.getFuzzAmount(), fuzz_run_args.getThreadsNumber(), fuzz_run_args.getStdinInput())
 
 if __name__ == '__main__':
     main()
