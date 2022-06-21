@@ -2,7 +2,6 @@ import subprocess
 import os
 import hashlib
 import time
-import logging
 from FileGenerator.AbstractBaseFileGenerator import AbstractBaseFileGenerator
 from typing import Union
 import threading
@@ -15,11 +14,9 @@ class Fuzzer:
     def __init__(self, file_generator: AbstractBaseFileGenerator, crashes_dir_path):
         self.file_generator = file_generator
         self.crashes_dir_path = crashes_dir_path
-        self.logger = logging.getLogger('Fuzzer info')
         self.amount_of_fuzzings = 0
         self.stop = False
         self.fuzz_lock = threading.Lock()
-        logging.basicConfig(level=logging.INFO)
 
 
     ''' 
@@ -43,7 +40,7 @@ class Fuzzer:
         ret = sp.wait()
 
         if ret < 0:
-            self.logger.info(f"Exited with {ret}")
+            print(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             if ret == -11:
                 # SIGSEGV - Invalid memory reference
@@ -133,4 +130,4 @@ class Fuzzer:
             time.sleep(2)
             elapsed = time.time() - start_time
             fscp = float(self.amount_of_fuzzings) / elapsed
-            self.logger.info(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
+            print(f"[{elapsed}] cases {self.amount_of_fuzzings} | fcps {fscp}")
