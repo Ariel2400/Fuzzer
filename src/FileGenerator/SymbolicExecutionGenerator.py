@@ -7,10 +7,11 @@ from typing import Union
 class SymbolicExecutionGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator):
 
     def __init__(self, symbolic_execution_producer: Union[SymbolicExecutionProducer, None], symbolic_execution_engine: Union[SymbolicExecution, None]):
-        self.consumer = Consumer()
         self.symbolic_execution_producer = symbolic_execution_producer
         self.stop_generator = False
         self.symbolic_execution_engine = symbolic_execution_engine
+        if symbolic_execution_producer is not None:
+            self.consumer = Consumer()
         if symbolic_execution_engine is not None:
             self.generator = self.symbolic_execution_engine.getTargetInput()
   
@@ -22,7 +23,7 @@ class SymbolicExecutionGenerator(AbstractBaseFileGenerator.AbstractBaseFileGener
             data = list(batches.values())[0][0].value
         else:
             data = next(self.generator)
-        
+            print(data)
         return data
 
     def generateFile(self, path: str):
