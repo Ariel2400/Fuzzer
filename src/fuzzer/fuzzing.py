@@ -24,18 +24,24 @@ class Fuzzer:
     target command line args is in the format: [[target], [-args]].
     '''
 
-    def fuzz(self, file_save_fuzz_content, content, target_command_line_args):
+    def fuzz(self, file_save_fuzz_content, content, target_command_line_args, isStdinInput: bool):
         assert isinstance(file_save_fuzz_content, str)
         assert isinstance(content, bytes)
         assert isinstance(target_command_line_args, list)
+        sp = None
+
         # run the target on the sample content with args,
         # if crashed, document the crash in a file and put it in self.crashes_dir
-        with open(file_save_fuzz_content, "wb") as fd:
-            fd.write(content)
-
-        sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
-                              stdout=subprocess.DEVNULL,
-                              stderr=subprocess.DEVNULL, )
+        if isStdinInput:
+            sp = subprocess.Popen(target_command_line_args, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout_data = sp.communicate(input=content)[0]
+        else:
+            with open(file_save_fuzz_content, "wb") as fd:
+                fd.write(content)
+            print(target_command_line_args + [file_save_fuzz_content])
+            sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
+                                stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL, )
 
         ret = sp.wait()
 
@@ -75,7 +81,7 @@ class Fuzzer:
     iterate over samples and fuzz them
     '''
 
-    def fuzz_worker(self, target_command_line_args, fuzz_cycles: Union[int, None], threads_number: Union[int, None]):
+    def fuzz_worker(self, target_command_line_args, fuzz_cycles: Union[int, None], threads_number: Union[int, None], isStdinInput: bool):
         assert isinstance(target_command_line_args, list)
 
         if(threads_number == None):
@@ -88,7 +94,7 @@ class Fuzzer:
         fuzz_threads = []
 
         for thread_number in range(threads_number):
-            t_fuzz = threading.Thread(target=self.fuzzing_loop, args=[thread_number, target_command_line_args, fuzz_cycles])
+            t_fuzz = threading.Thread(target=self.fuzzing_loop, args=[thread_number, target_command_line_args, fuzz_cycles, isStdinInput])
             t_fuzz.start()
             fuzz_threads += [t_fuzz]
 
@@ -97,25 +103,27 @@ class Fuzzer:
             th.join()
 
 
-    def fuzzing_loop(self, thread_number: int, target_command_line_args, fuzz_cycles: Union[int, None]):
+    def fuzzing_loop(self, thread_number: int, target_command_line_args, fuzz_cycles: Union[int, None], isStdinInput: bool):
         #Infinity fuzzing
         if fuzz_cycles == None:
             while True:
-                self.generate_fuzz(thread_number, target_command_line_args)
+                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput)
 
         #Finity fuzzing
         else:
             while True and not self.stop:
-                self.generate_fuzz(thread_number, target_command_line_args)
-                if(self.amount_of_fuzzings >= fuzz_cycles):
+                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput)
+                if(self.amount_of_fuzzings >= fuzz_cycles) and not self.stop:
                     self.stop = True
+                    self.file_generator.close()
+                    
 
 
-    def generate_fuzz(self, thread_number, target_command_line_args):
+    def generate_fuzz(self, thread_number, target_command_line_args, isStdinInput: bool):
         self.fuzz_lock.acquire()
         input_file_content = self.file_generator.generateData()
         self.fuzz_lock.release()
-        self.fuzz("thd_" + str(thread_number), input_file_content, target_command_line_args)
+        self.fuzz("thd_" + str(thread_number), input_file_content, target_command_line_args, isStdinInput)
         self.amount_of_fuzzings += 1
 
 
