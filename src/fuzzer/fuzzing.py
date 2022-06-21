@@ -1,4 +1,3 @@
-from asyncore import write
 import subprocess
 import os
 import hashlib
