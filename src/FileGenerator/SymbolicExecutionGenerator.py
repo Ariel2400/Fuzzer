@@ -23,7 +23,6 @@ class SymbolicExecutionGenerator(AbstractBaseFileGenerator.AbstractBaseFileGener
             data = list(batches.values())[0][0].value
         else:
             data = next(self.generator)
-            print(data)
         return data
 
     def generateFile(self, path: str):

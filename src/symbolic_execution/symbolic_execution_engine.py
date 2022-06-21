@@ -50,7 +50,6 @@ class SymbolicExecution:
 
     def addStates(self, entry_state):
         simgr = self.proj.factory.simgr(entry_state)
-        print("start")
         while len(simgr.active) > 0 and not self.stop:
             #check if add state to states dict
             for angrActiveState in simgr.active:
@@ -61,7 +60,6 @@ class SymbolicExecution:
 
             #step every state in one basic block
             simgr.step()
-        print("done")
 
     def addConstraintToStates(self, satisfied_data, input_sym, state):
         self.statesLock.acquire()
