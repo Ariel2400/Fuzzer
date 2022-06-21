@@ -1,7 +1,6 @@
 import time
 import angr
 import claripy
-from consts import BITS_IN_BYTE, SymbolicExecutionProperties
 import threading
 import random
 
