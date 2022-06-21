@@ -5,6 +5,12 @@ from mutation.mutations import SimpleMutation
 from FileGenerator.MutationGenerator import MutationFileGenerator
 from FileGenerator.GrammarGenerator import GrammarFileGenerator
 from fuzzer.fuzzing import Fuzzer
+from symbolic_execution.symbolic_execution import SymbolicExecution
+from symbolic_execution.symbolic_execution import SymbolicExecutionProperties
+from kafka_handlers.producer import Producer
+from symbolic_execution.symbolic_execution_producer import SymbolicExecutionProducer
+from FileGenerator.SymbolicExecutionGenerator import SymbolicExecutionGenerator
+
 def main():
 
     if len(sys.argv) < 2:
@@ -28,7 +34,13 @@ def main():
         file_generator = GrammarFileGenerator(fuzz_run_args.getGrammarFilePath(), schema_path, fuzz_run_args.getMutation())
     elif fuzz_type == "symbolic_execution":
         fuzz_run_args = SymbolicFuzzRunArgs()
-        pass
+        symbolicExecutionProperties = SymbolicExecutionProperties(fuzz_run_args.getLenSymbolicBytes(), fuzz_run_args.getLoadDynamicLibaries())
+        symbolicExecutionEngine = SymbolicExecution(symbolicExecutionProperties, fuzz_run_args.getTarget(), fuzz_run_args.getTargetArgs())
+        kafkaProducer = Producer()
+        symbolicExecutionProducer = SymbolicExecutionProducer(symbolicExecutionEngine, kafkaProducer)
+        symbolicExecutionProducer.startProduce()
+        file_generator = SymbolicExecutionGenerator()
+
 
     fuzzer = Fuzzer(file_generator, fuzz_run_args.getCrashesDirPath())
     fuzzer.fuzz_worker([fuzz_run_args.getTarget()] + fuzz_run_args.getTargetArgs(), fuzz_run_args.getFuzzAmount(), fuzz_run_args.getThreadsNumber())
