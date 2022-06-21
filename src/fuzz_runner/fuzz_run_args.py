@@ -9,7 +9,7 @@ class FuzzRunArgs:
         self.parser.add_argument("--crashes_dir_path", help="specify crashes_dir_path for fuzzing crashes", required=True)
         self.parser.add_argument("--fuzz_amount", help="fuzz amount of fuzzing", type=int)
         self.parser.add_argument("--threads_number", help="number of threads that will be fuzz in parallel", type=int)
-        self.parser.add_argument("--snapshot_fuzzing_enable", help="use snapshot fuzzing", action="store_true")
+        self.parser.add_argument("--stdin_input", help="throw input to target's stdin instead as a file argument", action="store_true")
 
     def getTarget(self):
         return self.args.target
@@ -26,8 +26,8 @@ class FuzzRunArgs:
     def getThreadsNumber(self):
         return self.args.threads_number
 
-    def getSnapshotFuzzingEnable(self):
-        return self.args.snapshot_fuzzing_enable
+    def getStdinInput(self):
+        return self.args.stdin_input
 
 class MutationFuzzRunArgs(FuzzRunArgs):
 
