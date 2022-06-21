@@ -5,8 +5,8 @@ from mutation.mutations import SimpleMutation
 from FileGenerator.MutationGenerator import MutationFileGenerator
 from FileGenerator.GrammarGenerator import GrammarFileGenerator
 from fuzzer.fuzzing import Fuzzer
-from symbolic_execution.symbolic_execution import SymbolicExecution
-from symbolic_execution.symbolic_execution import SymbolicExecutionProperties
+from symbolic_execution.symbolic_execution_engine import SymbolicExecution
+from symbolic_execution.symbolic_execution_engine import SymbolicExecutionProperties
 from kafka_handlers.producer import Producer
 from symbolic_execution.symbolic_execution_producer import SymbolicExecutionProducer
 from FileGenerator.SymbolicExecutionGenerator import SymbolicExecutionGenerator

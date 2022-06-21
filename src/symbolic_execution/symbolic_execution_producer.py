@@ -1,4 +1,4 @@
-from symbolic_execution.symbolic_execution import SymbolicExecution
+from symbolic_execution.symbolic_execution_engine import SymbolicExecution
 from kafka_handlers.producer import Producer
 import threading
 
