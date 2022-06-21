@@ -9,7 +9,7 @@ class FuzzRunArgs:
         self.parser.add_argument("--crashes_dir_path", help="specify crashes_dir_path for fuzzing crashes", required=True)
         self.parser.add_argument("--fuzz_amount", help="fuzz amount of fuzzing", type=int)
         self.parser.add_argument("--threads_number", help="number of threads that will be fuzz in parallel", type=int)
-        self.parser.add_argument("--snapshot_fuzzing_enable", help="use snapshot fuzzing", action="store_true")
+        self.parser.add_argument("--stdin_input", help="throw input to target's stdin instead as a file argument", action="store_true")
 
     def getTarget(self):
         return self.args.target
@@ -26,8 +26,8 @@ class FuzzRunArgs:
     def getThreadsNumber(self):
         return self.args.threads_number
 
-    def getSnapshotFuzzingEnable(self):
-        return self.args.snapshot_fuzzing_enable
+    def getStdinInput(self):
+        return self.args.stdin_input
 
 class MutationFuzzRunArgs(FuzzRunArgs):
 
@@ -57,4 +57,16 @@ class SymbolicFuzzRunArgs(FuzzRunArgs):
 
     def __init__(self):
         super().__init__()
+        self.parser.add_argument("--len_symbolic_bytes", help="len_symbolic_bytes for target input len symbolic bytes", required=True, type=int)
+        self.parser.add_argument("--load_dynamic_libaries", help="load dynamic libaries for symbolic execution", action="store_true")
+        self.parser.add_argument("--use_kafka", help="use kafka for delivering messages to fuzzer", action="store_true")
         self.args, self.unknown = self.parser.parse_known_args()
+
+    def getLenSymbolicBytes(self):
+        return self.args.len_symbolic_bytes
+
+    def getLoadDynamicLibaries(self):
+        return self.args.load_dynamic_libaries
+
+    def getUseKafka(self):
+        return self.args.use_kafka

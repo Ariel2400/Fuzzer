@@ -1,9 +1,16 @@
 import time
 import angr
 import claripy
-from consts import BITS_IN_BYTE, SymbolicExecutionProperties
 import threading
 import random
+
+BITS_IN_BYTE = 8
+
+class SymbolicExecutionProperties:
+    
+    def __init__(self, len_symbolic_bytes, load_dynamic_libaries):
+        self.load_dynamic_libaries = load_dynamic_libaries
+        self.len_symbolic_bytes = len_symbolic_bytes
 
 class State:
 
@@ -13,7 +20,7 @@ class State:
 
 class SymbolicExecution:
 
-    def __init__(self, symbolic_execution_properties, target, command_line_args = []):
+    def __init__(self, symbolic_execution_properties: SymbolicExecutionProperties, target, command_line_args = []):
         self.target = target
         self.command_line_args = command_line_args
         self.proj = angr.Project(target, auto_load_libs=symbolic_execution_properties.load_dynamic_libaries)
@@ -24,7 +31,7 @@ class SymbolicExecution:
     
     #returning target input to reach a random basic block
     def getTargetInput(self):
-        input_sym_chars = [claripy.BVS('input_%d', BITS_IN_BYTE) for i in range(self.symbolic_execution_properties.len_symbolic_bits)]
+        input_sym_chars = [claripy.BVS('input_%d', BITS_IN_BYTE) for i in range(self.symbolic_execution_properties.len_symbolic_bytes)]
         input_sym = claripy.Concat(*input_sym_chars)
         entry_state = self.proj.factory.entry_state(args=[self.target] + self.command_line_args, add_options=angr.options.unicorn , stdin=input_sym) 
         addStatesThread = threading.Thread(target=self.addStates, args=(entry_state,))
@@ -43,7 +50,6 @@ class SymbolicExecution:
 
     def addStates(self, entry_state):
         simgr = self.proj.factory.simgr(entry_state)
-        print("start")
         while len(simgr.active) > 0 and not self.stop:
             #check if add state to states dict
             for angrActiveState in simgr.active:
@@ -54,7 +60,6 @@ class SymbolicExecution:
 
             #step every state in one basic block
             simgr.step()
-        print("done")
 
     def addConstraintToStates(self, satisfied_data, input_sym, state):
         self.statesLock.acquire()
@@ -86,7 +91,7 @@ class SymbolicExecution:
 
 
 if __name__ == '__main__':
-    symbolicExecutionProperties = SymbolicExecutionProperties(False, 4)
+    symbolicExecutionProperties = SymbolicExecutionProperties(4, False)
     #symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/usr/bin/jq', ['.'])
     symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/home/tomer/code/a.out', ['flag1'])
     generator = symbolicExecution.getTargetInput()
