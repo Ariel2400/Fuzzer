@@ -14,9 +14,12 @@ class SymbolicExecutionProducer:
      def produceInputs(self):
           generator = self.symbolic_execution.getTargetInput()
           while True and not self.symbolic_execution.stop:
-               generated_input = next(generator)
-               print("sending producer ", generated_input)
-               self.producer.send(generated_input)
+            try:
+                generated_input = next(generator)
+                print("sending producer ", generated_input)
+                self.producer.send(generated_input)
+            except StopIteration:
+                pass
 
      def stopProduce(self):
-          self.symbolic_execution.stopProcessing()
+        self.symbolic_execution.stopProcessing()
