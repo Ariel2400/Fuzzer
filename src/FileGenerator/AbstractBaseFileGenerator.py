@@ -9,3 +9,6 @@ class AbstractBaseFileGenerator(ABC):
     @abstractmethod
     def generateFile(self, path: str):
         pass
+
+    def close(self):
+        pass
