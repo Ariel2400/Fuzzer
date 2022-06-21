@@ -1,3 +1,4 @@
+from asyncore import write
 import subprocess
 import os
 import hashlib
@@ -48,34 +49,38 @@ class Fuzzer:
         if ret < 0:
             print(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
+            crash_file_name = ""
             if ret == -11:
                 # SIGSEGV - Invalid memory reference
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSEGV"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGSEGV"
+
             if ret == -6:
                 # SIGABRT - Abort signal from abort()
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGABRT"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGABRT"
+                
             if ret == -7:
                 # SIGBUS - Bus error (bad memory access)
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGBUS"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGBUS"
+                
             if ret == -8:
                 # SIGFPE - Floating-point exception
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGFPE"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGFPE"
+                
             if ret == -4:
                 # SIGILL - Illegal Instruction
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGILL"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGILL"
+                
             if ret == -31:
                 # SIGSYS - Bad system call
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGSYS"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGSYS"
+                
             if ret == -24:
                 # SIGXCPU - CPU time limit exceeded
-                open(os.path.join(self.crashes_dir_path, f"crash_{hash:64}_SIGXCPU"),
-                     "wb").write(content)
+                crash_file_name = f"crash_{hash:64}_SIGXCPU"
+            
+            with open(os.path.join(self.crashes_dir_path, crash_file_name), "wb") as crash_file:
+                crash_file.write(content)
+            
 
     '''
     iterate over samples and fuzz them
@@ -107,24 +112,28 @@ class Fuzzer:
         #Infinity fuzzing
         if fuzz_cycles == None:
             while True:
-                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput)
+                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput, fuzz_cycles)
 
         #Finity fuzzing
         else:
             while True and not self.stop:
-                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput)
+                self.generate_fuzz(thread_number, target_command_line_args, isStdinInput, fuzz_cycles)
                 if(self.amount_of_fuzzings >= fuzz_cycles) and not self.stop:
                     self.stop = True
-                    self.file_generator.close()
                     
 
 
-    def generate_fuzz(self, thread_number, target_command_line_args, isStdinInput: bool):
+    def generate_fuzz(self, thread_number, target_command_line_args, isStdinInput: bool, fuzz_cycles: Union[int, None]):
         self.fuzz_lock.acquire()
+        if fuzz_cycles is not None and self.amount_of_fuzzings >= fuzz_cycles:
+            self.file_generator.close()
+            self.fuzz_lock.release()
+            return
+        self.amount_of_fuzzings += 1
         input_file_content = self.file_generator.generateData()
         self.fuzz_lock.release()
         self.fuzz("thd_" + str(thread_number), input_file_content, target_command_line_args, isStdinInput)
-        self.amount_of_fuzzings += 1
+    
 
 
 
