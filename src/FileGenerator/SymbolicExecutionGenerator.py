@@ -1,10 +1,12 @@
 from FileGenerator import AbstractBaseFileGenerator
 from kafka_handlers.consumer import Consumer
+from symbolic_execution.symbolic_execution_producer import SymbolicExecutionProducer
 
 class SymbolicExecutionGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator):
 
-    def __init__(self):
+    def __init__(self, symbolic_execution_producer: SymbolicExecutionProducer):
         self.consumer = Consumer()
+        self.symbolic_execution_producer = symbolic_execution_producer
   
     def generateData(self) -> bytes:
         batches = self.consumer.get_batch(1)
@@ -17,3 +19,6 @@ class SymbolicExecutionGenerator(AbstractBaseFileGenerator.AbstractBaseFileGener
         fileObj = open(path, "wb")
         fileObj.write(inputData)
         fileObj.close()
+
+    def close(self):
+        self.symbolic_execution_producer.stopProduce()
