@@ -59,6 +59,7 @@ class SymbolicFuzzRunArgs(FuzzRunArgs):
         super().__init__()
         self.parser.add_argument("--len_symbolic_bytes", help="len_symbolic_bytes for target input len symbolic bytes", required=True, type=int)
         self.parser.add_argument("--load_dynamic_libaries", help="load dynamic libaries for symbolic execution", action="store_true")
+        self.parser.add_argument("--use_kafka", help="use kafka for delivering messages to fuzzer", action="store_true")
         self.args, self.unknown = self.parser.parse_known_args()
 
     def getLenSymbolicBytes(self):
@@ -66,3 +67,6 @@ class SymbolicFuzzRunArgs(FuzzRunArgs):
 
     def getLoadDynamicLibaries(self):
         return self.args.load_dynamic_libaries
+
+    def getUseKafka(self):
+        return self.args.use_kafka
