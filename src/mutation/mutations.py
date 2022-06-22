@@ -8,7 +8,6 @@ class BaseMutation:
 
     
     def mutate(self, input_data: bytearray) -> bytearray:
-        print("aaaa")
         pass
 
 

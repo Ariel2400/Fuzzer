@@ -31,10 +31,10 @@ class MutationFileGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator)
         return sample_content_dict 
 
 
-    def generateData(self) -> bytearray:
+    def generateData(self) -> bytes:
         sample_path = random.choice(list(self.samples.keys()))
         sample_content = bytearray(self.samples[sample_path])
-        return self.mutation.mutate(sample_content)
+        return bytes(self.mutation.mutateCycles(sample_content, random.randint(0, len(self.samples[sample_path]))))
 
     def generateFile(self, path: str):
         mutateData = bytes(self.generateData())

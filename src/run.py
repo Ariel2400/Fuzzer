@@ -1,7 +1,7 @@
 import sys
 from fuzz_runner.input_validator import Validator
 from fuzz_runner.fuzz_run_args import MutationFuzzRunArgs, GenerationFuzzRunArgs, SymbolicFuzzRunArgs
-from mutation.mutations import SimpleMutation
+from mutation.mutations import Mutation3Choices
 from FileGenerator.MutationGenerator import MutationFileGenerator
 from FileGenerator.GrammarGenerator import GrammarFileGenerator
 from fuzzer.fuzzing import Fuzzer
@@ -27,7 +27,7 @@ def main():
 
     if fuzz_type == "mutation":
         fuzz_run_args = MutationFuzzRunArgs()
-        file_generator = MutationFileGenerator(fuzz_run_args.getSampleDirPath(), SimpleMutation())
+        file_generator = MutationFileGenerator(fuzz_run_args.getSampleDirPath(), Mutation3Choices())
     elif fuzz_type == "generation":
         fuzz_run_args = GenerationFuzzRunArgs()
         schema_path = "./src/generation/grammar-schema.json"
