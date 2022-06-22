@@ -5,7 +5,7 @@ class FuzzRunArgs:
     def __init__(self):
         self.parser = argparse.ArgumentParser()
         self.parser.add_argument("--target", help="specify target for fuzzing", required=True)
-        self.parser.add_argument('--target_args', nargs='+', help="specify command line arguments of target", required=True)
+        self.parser.add_argument('--target_args', nargs='+', help="specify command line arguments of target", required=False)
         self.parser.add_argument("--crashes_dir_path", help="specify crashes_dir_path for fuzzing crashes", required=True)
         self.parser.add_argument("--fuzz_amount", help="fuzz amount of fuzzing", type=int)
         self.parser.add_argument("--threads_number", help="number of threads that will be fuzz in parallel", type=int)
@@ -15,6 +15,8 @@ class FuzzRunArgs:
         return self.args.target
 
     def getTargetArgs(self):
+        if self.args.target_args in None:
+            return []
         return self.args.target_args
 
     def getCrashesDirPath(self):
@@ -51,6 +53,8 @@ class GenerationFuzzRunArgs(FuzzRunArgs):
         return self.args.grammar_file_path
 
     def getMutation(self):
+        if self.args.mutation_number is None:
+            return None
         return int(self.args.mutation_number)
         
 class SymbolicFuzzRunArgs(FuzzRunArgs):
