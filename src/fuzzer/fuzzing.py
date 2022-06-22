@@ -38,7 +38,6 @@ class Fuzzer:
         else:
             with open(file_save_fuzz_content, "wb") as fd:
                 fd.write(content)
-            print(target_command_line_args + [file_save_fuzz_content])
             sp = subprocess.Popen(target_command_line_args + [file_save_fuzz_content],
                                 stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL, )
