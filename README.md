@@ -1,4 +1,6 @@
 
+# Fuzzer
+General purpose fuzzer supports 3 different types of fuzzing techniques: Mutation, Generation and Symbolic Execution.
 ## Usage/Examples
 
 The first argument is the technique in which you want to perform fuzzing(mutation, Generation, symbolic_execution).
