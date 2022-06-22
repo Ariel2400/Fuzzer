@@ -63,10 +63,6 @@ class SymbolicExecution:
 
     def addConstraintToStates(self, satisfied_data, input_sym, state):
         self.statesLock.acquire()
-        '''for stateAddr in self.states:
-            if(self.states[stateAddr].satisfiable):
-                self.states[stateAddr].angrState.solver.add(input_sym != satisfied_data) #Adding a constraint that will not be returned to the same input
-                self.states[stateAddr].satisfiable = self.states[stateAddr].angrState.satisfiable()'''
         state.angrState.solver.add(input_sym != satisfied_data)
         state.satisfiable = state.angrState.satisfiable()
         self.statesLock.release()
@@ -87,17 +83,3 @@ class SymbolicExecution:
     def stopProcessing(self):
         self.stop = True
 
-
-
-
-if __name__ == '__main__':
-    symbolicExecutionProperties = SymbolicExecutionProperties(4, False)
-    #symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/usr/bin/jq', ['.'])
-    symbolicExecution = SymbolicExecution(symbolicExecutionProperties, '/home/tomer/code/a.out', ['flag1'])
-    generator = symbolicExecution.getTargetInput()
-    print(next(generator), '\n')
-    time.sleep(5)
-    print("timer done")
-    for _ in range(100):
-        print(next(generator), '\n')
-    symbolicExecution.stopProcessing()
