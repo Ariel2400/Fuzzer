@@ -15,7 +15,7 @@ class FuzzRunArgs:
         return self.args.target
 
     def getTargetArgs(self):
-        if self.args.target_args in None:
+        if self.args.target_args is None:
             return []
         return self.args.target_args
 
