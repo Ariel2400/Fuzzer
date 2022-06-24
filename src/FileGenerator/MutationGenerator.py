@@ -6,7 +6,8 @@ import os
 
 class MutationFileGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator):
 
-    def __init__(self, sample_dir_path: str, mutation: BaseMutation):
+    def __init__(self, sample_dir_path: str, mutation: BaseMutation, mutation_number: int):
+        self.mutation_number = mutation_number
         self.sample_dir_path = sample_dir_path
         self.mutation = mutation
         self.samples = self.load_samples()
@@ -34,7 +35,7 @@ class MutationFileGenerator(AbstractBaseFileGenerator.AbstractBaseFileGenerator)
     def generateData(self) -> bytes:
         sample_path = random.choice(list(self.samples.keys()))
         sample_content = bytearray(self.samples[sample_path])
-        return bytes(self.mutation.mutateCycles(sample_content, random.randint(0, len(self.samples[sample_path]))))
+        return bytes(self.mutation.mutateCycles(sample_content, self.mutation_number))
 
     def generateFile(self, path: str):
         mutateData = bytes(self.generateData())

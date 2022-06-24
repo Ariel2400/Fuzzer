@@ -36,10 +36,14 @@ class MutationFuzzRunArgs(FuzzRunArgs):
     def __init__(self):
         super().__init__()
         self.parser.add_argument("--sample_dir_path", help="sample_dir_path for samples mutation", required=True)
+        self.parser.add_argument("--mutation_number", help="do mutation_number number of mutation", type=int, required=True)
         self.args, self.unknown = self.parser.parse_known_args()
 
     def getSampleDirPath(self):
         return self.args.sample_dir_path
+
+    def getMutationNumber(self):
+        return self.args.mutation_number
 
 class GenerationFuzzRunArgs(FuzzRunArgs):
 

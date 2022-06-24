@@ -27,7 +27,7 @@ def main():
 
     if fuzz_type == "mutation":
         fuzz_run_args = MutationFuzzRunArgs()
-        file_generator = MutationFileGenerator(fuzz_run_args.getSampleDirPath(), Mutation3Choices())
+        file_generator = MutationFileGenerator(fuzz_run_args.getSampleDirPath(), Mutation3Choices(), fuzz_run_args.getMutationNumber())
     elif fuzz_type == "generation":
         fuzz_run_args = GenerationFuzzRunArgs()
         schema_path = "./src/generation/grammar-schema.json"
