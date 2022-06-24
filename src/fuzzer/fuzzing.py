@@ -45,37 +45,36 @@ class Fuzzer:
         ret = sp.wait()
 
         if ret < 0:
-            print(f"Exited with {ret}")
             hash = hashlib.sha256(content).hexdigest()
             crash_file_name = ""
             if ret == -11:
                 # SIGSEGV - Invalid memory reference
                 crash_file_name = f"crash_{hash:64}_SIGSEGV"
-
+                print(f"Exited with SIGSEGV")
             if ret == -6:
                 # SIGABRT - Abort signal from abort()
                 crash_file_name = f"crash_{hash:64}_SIGABRT"
-                
+                print(f"Exited with SIGABRT")
             if ret == -7:
                 # SIGBUS - Bus error (bad memory access)
                 crash_file_name = f"crash_{hash:64}_SIGBUS"
-                
+                print(f"Exited with SIGBUS")
             if ret == -8:
                 # SIGFPE - Floating-point exception
                 crash_file_name = f"crash_{hash:64}_SIGFPE"
-                
+                print(f"Exited with SIGFPE")
             if ret == -4:
                 # SIGILL - Illegal Instruction
                 crash_file_name = f"crash_{hash:64}_SIGILL"
-                
+                print(f"Exited with SIGILL")
             if ret == -31:
                 # SIGSYS - Bad system call
                 crash_file_name = f"crash_{hash:64}_SIGSYS"
-                
+                print(f"Exited with SIGSYS")
             if ret == -24:
                 # SIGXCPU - CPU time limit exceeded
                 crash_file_name = f"crash_{hash:64}_SIGXCPU"
-            
+                print(f"Exited with SIGXCPU")
             with open(os.path.join(self.crashes_dir_path, crash_file_name), "wb") as crash_file:
                 crash_file.write(content)
             
